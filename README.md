@@ -1,6 +1,10 @@
 # ZerobotCourse
 zerobot框架教学入门
 
+## 为什么选择zerobot作为qqbot开发框架
+1. go语言本身的优势
+2. zerobot结构清楚
+
 本课程适用于一些喜欢编程, 想要开发自己的qq机器人, 最好是有一门编程语言基础的人~~计算机大一学生~~
 
 - [ZerobotCourse](#zerobotcourse)
@@ -31,10 +35,16 @@ zerobot框架教学入门
 
 ### 步骤: 
 
+- 运行fastgithub
 - 搭建go语言环境
     - 安装go源代码
     - 安装vscode
     - 配置vscode的go扩展插件, 参考[go插件配置](第零课/vscodeSettings.md)
+- git配置
+    - 创建github账号
+    - ssh-keygen -t rsa -C "1156544355@qq.com"
+    - git config --global user.name "小锅饭"
+    - git config --global user.email "1156544355@qq.com"
 - 安装[go-cqhttp](https://docs.go-cqhttp.org/) (go-cqhttp相当于qq的第三方客户端, 为我们的程序提供qq的接口, 我们调它的接口, 完成发送qq消息, 下载群文件等操作)
 - 下载zerobot框架源码, 并运行 (zerobot框架提供go-cqhttp的接口的封装, 便于开发者编写)
 
