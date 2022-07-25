@@ -10,7 +10,7 @@ func init() {
 	engine.OnFullMatch("牛逼", zero.AdminPermission).Handle(func(ctx *zero.Ctx) {
 		ctx.SendChain(message.Text("你很牛逼"))
 	})
-	engine.OnKeyword("消息检测", checkRule).Handle(func(ctx *zero.Ctx) {
+	engine.OnFullMatch("消息检测", checkRule).Handle(func(ctx *zero.Ctx) {
 		ctx.SendChain(message.Text("检测完毕"))
 	})
 }

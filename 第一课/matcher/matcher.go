@@ -34,7 +34,7 @@ func init() {
 		args := ctx.State["args"].(string)
 		ctx.SendChain(message.Text("前缀匹配的前缀: ", prefix, "\n前缀匹配的参数: ", args))
 	})
-	engine.OnRegex(`(.*)在(.*)`).Handle(func(ctx *zero.Ctx) {
+	engine.OnRegex(`(.*)正在(.*)`).Handle(func(ctx *zero.Ctx) {
 		regexMatched := ctx.State["regex_matched"].([]string)
 		ctx.SendChain(message.Text("正则匹配的匹配组: ", regexMatched))
 	})

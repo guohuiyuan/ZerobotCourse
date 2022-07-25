@@ -22,6 +22,12 @@ func init() {
 	engine.OnFullMatch("语音").Handle(func(ctx *zero.Ctx) {
 		ctx.SendChain(message.Record("https://vtbkeyboard.moe/api/audio/672328094/%E7%8C%AB%E7%8C%AB%E8%B7%9F%E9%BC%A0%E9%BC%A0%E4%B8%8D%E5%86%B2%E7%AA%81.mp3"))
 	})
+	engine.OnFullMatch("表情").Handle(func(ctx *zero.Ctx) {
+		ctx.SendChain(message.Face(1))
+	})
+	engine.OnFullMatch("音乐").Handle(func(ctx *zero.Ctx) {
+		ctx.SendChain(message.Music("163", 28949129))
+	})
 	engine.OnFullMatch("tts").Handle(func(ctx *zero.Ctx) {
 		ctx.SendChain(message.TTS("你好"))
 	})
