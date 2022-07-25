@@ -112,7 +112,7 @@ func init() {
 [持续对话代码](https://github.com/wdvxdr1123/ZeroBot/blob/main/event_channel.go)
 
 ### 示例代码
-进入第一课目录,然后go run main.go
+进入[第一课](./%E7%AC%AC%E4%B8%80%E8%AF%BE/main.go)目录,然后go run main.go
 
 ```
 cd 第一课
