@@ -17,12 +17,12 @@ zerobot框架教学入门
   - [第一课](#第一课)
     - [了解zerobot框架](#了解zerobot框架)
     - [helloworld](#helloworld)
+    - [示例代码](#示例代码)
     - [匹配器](#匹配器)
     - [规则](#规则)
     - [cqhttp API](#cqhttp-api)
     - [消息](#消息)
     - [持续对话](#持续对话)
-    - [示例代码](#示例代码)
 
 ## 第零课
 
@@ -78,10 +78,11 @@ zerobot的消息类型,rule相当于路由, zb的前置和后置处理相当于w
 输入hello, 机器回复hello world
 
 ```
-package hello
+package main
 
 import (
 	zero "github.com/wdvxdr1123/ZeroBot"
+	"github.com/wdvxdr1123/ZeroBot/driver"
 	"github.com/wdvxdr1123/ZeroBot/message"
 )
 
@@ -92,9 +93,28 @@ func init() {
 	})
 }
 
+func main(){
+	zero.RunAndBlock(zero.Config{
+		NickName:      []string{"bot"},
+		CommandPrefix: "/",
+		SuperUsers:    []int64{123456},
+		Driver: []zero.Driver{
+			driver.NewWebSocketClient("ws://127.0.0.1:6700/", ""),
+		},
+	}, nil)
+}
+
 ```
 
 注意: 所有engine都是在init的过程中注册的
+
+### 示例代码
+进入[第一课](./%E7%AC%AC%E4%B8%80%E8%AF%BE/main.go)目录,然后go run main.go
+
+```
+cd 第一课
+go run main.go
+```
 
 ### 匹配器
 [匹配器代码](https://github.com/wdvxdr1123/ZeroBot/blob/main/engine.go)
@@ -110,11 +130,3 @@ func init() {
 
 ### 持续对话
 [持续对话代码](https://github.com/wdvxdr1123/ZeroBot/blob/main/event_channel.go)
-
-### 示例代码
-进入[第一课](./%E7%AC%AC%E4%B8%80%E8%AF%BE/main.go)目录,然后go run main.go
-
-```
-cd 第一课
-go run main.go
-```
