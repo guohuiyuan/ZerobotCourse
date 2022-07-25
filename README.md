@@ -17,8 +17,11 @@ zerobot框架教学入门
   - [第一课](#第一课)
     - [了解zerobot框架](#了解zerobot框架)
     - [helloworld](#helloworld)
-    - [example](#example)
-      - [](#)
+    - [匹配器](#匹配器)
+    - [规则](#规则)
+    - [cqhttp API](#cqhttp-api)
+    - [消息](#消息)
+    - [持续对话](#持续对话)
 
 ## 第零课
 
@@ -82,14 +85,27 @@ import (
 )
 
 func init() {
-	zero.OnFullMatch("hello").Handle(func(ctx *zero.Ctx) {
+	engine := zero.New()
+	engine.OnFullMatch("hello").Handle(func(ctx *zero.Ctx) {
 		ctx.SendChain(message.Text("hello world!"))
 	})
 }
+
 ```
 
 注意: 所有engine都是在init的过程中注册的
 
-### example
+### 匹配器
+[匹配器代码](https://github.com/wdvxdr1123/ZeroBot/blob/main/engine.go)
 
-#### 
+### 规则
+[规则代码](https://github.com/wdvxdr1123/ZeroBot/blob/main/rules.go)
+
+### cqhttp API
+[cqhttp API代码](https://github.com/wdvxdr1123/ZeroBot/blob/main/api.go)
+
+### 消息
+[消息代码](https://github.com/wdvxdr1123/ZeroBot/blob/main/message/message.go)
+
+### 持续对话
+[持续对话代码](https://github.com/wdvxdr1123/ZeroBot/blob/main/event_channel.go)
