@@ -124,9 +124,13 @@ go run main.go
 
 ### cqhttp API
 [cqhttp API代码](https://github.com/wdvxdr1123/ZeroBot/blob/main/api.go)
+[合并转发参考代码](https://github.com/FloatTech/ZeroBot-Plugin/blob/master/plugin/coser/coser.go)
+[群管理相关api参考代码](https://github.com/FloatTech/ZeroBot-Plugin/blob/master/plugin/manager/manager.go)
+[ctxext api的包装](https://github.com/FloatTech/zbputils/blob/4e1d708dffe9/ctxext/message.go)
 
 ### 消息
 [消息代码](https://github.com/wdvxdr1123/ZeroBot/blob/main/message/message.go)
 
 ### 持续对话
 [持续对话代码](https://github.com/wdvxdr1123/ZeroBot/blob/main/event_channel.go)
+[对话参考代码](https://github.com/FloatTech/ZeroBot-Plugin/blob/master/plugin/wordle/wordle.go)
