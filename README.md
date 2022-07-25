@@ -22,6 +22,7 @@ zerobot框架教学入门
     - [cqhttp API](#cqhttp-api)
     - [消息](#消息)
     - [持续对话](#持续对话)
+    - [示例代码](#示例代码)
 
 ## 第零课
 
@@ -71,7 +72,7 @@ zerobot框架教学入门
 ### 了解zerobot框架
 在我看, zerobot框架和那些web框架挺相似的, 不过zerobot是用的websocket, 是双向的, 而web框架是的使用http, 是单向.
 
-zerobot的消息类型相当于路由, rule相当于web中间件, handle都对应的消息的处理, 都定义了context储存上下文的消息
+zerobot的消息类型,rule相当于路由, zb的前置和后置处理相当于web中间件, handle都对应的消息的处理, 都定义了context储存上下文的消息
 
 ### helloworld
 输入hello, 机器回复hello world
@@ -109,3 +110,11 @@ func init() {
 
 ### 持续对话
 [持续对话代码](https://github.com/wdvxdr1123/ZeroBot/blob/main/event_channel.go)
+
+### 示例代码
+进入第一课目录,然后go run main.go
+
+```
+cd 第一课
+go run main.go
+```
