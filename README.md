@@ -23,6 +23,10 @@ zerobot框架教学入门
     - [cqhttp API](#cqhttp-api)
     - [消息](#消息)
     - [持续对话](#持续对话)
+  - [第二课](#第二课)
+    - [http](#http)
+    - [json.Unmarshal](#jsonunmarshal)
+    - [gjson](#gjson)
 
 ## 第零课
 
@@ -138,3 +142,35 @@ go run main.go
 [持续对话代码](https://github.com/wdvxdr1123/ZeroBot/blob/main/event_channel.go)
 
 [对话参考代码](https://github.com/FloatTech/ZeroBot-Plugin/blob/master/plugin/wordle/wordle.go)
+
+
+## 第二课
+
+### http
+
+```
+package main
+
+import (
+	"fmt"
+
+	"github.com/FloatTech/zbputils/web"
+)
+
+var (
+	requestURL = "https://api.shadiao.app/chp"
+)
+
+func main() {
+	data, err := web.RequestDataWith(web.NewDefaultClient(), requestURL, "GET", "", web.RandUA())
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(string(data))
+}
+```
+
+### json.Unmarshal
+
+### gjson
