@@ -24,9 +24,12 @@ zerobot框架教学入门
     - [消息](#消息)
     - [持续对话](#持续对话)
   - [第二课](#第二课)
-    - [http](#http)
-    - [json.Unmarshal](#jsonunmarshal)
+    - [http + gjson解析](#http--gjson解析)
+    - [http + json.Unmarshal 解析](#http--jsonunmarshal-解析)
     - [gjson](#gjson)
+    - [api实践](#api实践)
+      - [apifox使用](#apifox使用)
+      - [练习](#练习)
 
 ## 第零课
 
@@ -146,7 +149,7 @@ go run main.go
 
 ## 第二课
 
-### http
+### http + gjson解析
 
 ```
 package main
@@ -155,6 +158,7 @@ import (
 	"fmt"
 
 	"github.com/FloatTech/zbputils/web"
+	"github.com/tidwall/gjson"
 )
 
 var (
@@ -168,9 +172,58 @@ func main() {
 		return
 	}
 	fmt.Println(string(data))
+	fmt.Println(gjson.GetBytes(data, "data.text").String())
+}
+
+```
+
+### http + json.Unmarshal 解析
+
+```
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+
+	"github.com/FloatTech/zbputils/web"
+)
+
+var (
+	requestURL = "https://api.shadiao.app/chp"
+)
+
+type shadiao struct {
+	Data struct {
+		Type string `json:"type"`
+		Text string `json:"text"`
+	} `json:"data"`
+}
+
+func main() {
+	data, err := web.RequestDataWith(web.NewDefaultClient(), requestURL, "GET", "", web.RandUA())
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	var s shadiao
+	json.Unmarshal(data, &s)
+	fmt.Printf("%+v\n", s)
 }
 ```
 
-### json.Unmarshal
-
 ### gjson
+
+[gjson使用教程](https://www.topgoer.com/%E5%85%B6%E4%BB%96/gjson.html)
+
+### api实践
+
+#### apifox使用
+
+使用apifox来测试api是否可用
+
+#### 练习
+
+使用现成的api来编写插件
+
+[ddbot模板使用的api](https://docs.qq.com/doc/DVERZT0FrYVNEb01j)
