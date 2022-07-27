@@ -9,12 +9,12 @@ zerobot框架教学入门
 
 - [ZerobotCourse](#zerobotcourse)
   - [为什么选择zerobot作为qqbot开发框架](#为什么选择zerobot作为qqbot开发框架)
-  - [第零课](#第零课)
+  - [第0课](#第0课)
     - [开发环境搭建](#开发环境搭建)
     - [需要以下工具](#需要以下工具)
     - [步骤](#步骤)
     - [参考](#参考)
-  - [第一课](#第一课)
+  - [第1课](#第1课)
     - [了解zerobot框架](#了解zerobot框架)
     - [helloworld](#helloworld)
     - [示例代码](#示例代码)
@@ -23,7 +23,7 @@ zerobot框架教学入门
     - [cqhttp API](#cqhttp-api)
     - [消息](#消息)
     - [持续对话](#持续对话)
-  - [第二课](#第二课)
+  - [第2课](#第2课)
     - [http + gjson解析](#http--gjson解析)
     - [http + json.Unmarshal 解析](#http--jsonunmarshal-解析)
     - [gjson](#gjson)
@@ -31,7 +31,7 @@ zerobot框架教学入门
       - [apifox使用](#apifox使用)
       - [练习](#练习)
 
-## 第零课
+## 第0课
 
 ### 开发环境搭建
 
@@ -57,7 +57,7 @@ zerobot框架教学入门
     - 安装go源代码
     - 配置go的变量GOROOT和GOPATH, 并将%GOROOT%/bin和%GOPATH%/bin 添加到环境变量
     - 安装vscode
-    - 配置vscode的go扩展插件, 参考[go插件配置](第零课/vscodeSettings.md)
+    - 配置vscode的go扩展插件, 参考[go插件配置](第0课/vscodeSettings.md)
 - git配置 (用户名和邮箱使用你自己的)
     - 创建github账号
     - ssh-keygen -t rsa -C "1156544355@qq.com"
@@ -74,7 +74,7 @@ zerobot框架教学入门
 5. [zerobot-plugin江林版](https://github.com/Jiang-Red/ZeroBot-Plugin)
 
 
-## 第一课
+## 第1课
 
 ### 了解zerobot框架
 在我看, zerobot框架和那些web框架挺相似的, 不过zerobot是用的websocket, 是双向的, 而web框架是的使用http, 是单向.
@@ -116,10 +116,10 @@ func main(){
 注意: 所有engine都是在init的过程中注册的
 
 ### 示例代码
-进入[第一课](./%E7%AC%AC%E4%B8%80%E8%AF%BE/main.go)目录,然后go run main.go
+进入[第一课](./第1课/main.go)目录,然后go run main.go
 
 ```
-cd 第一课
+cd 第1课
 go run main.go
 ```
 
@@ -147,7 +147,7 @@ go run main.go
 [对话参考代码](https://github.com/FloatTech/ZeroBot-Plugin/blob/master/plugin/wordle/wordle.go)
 
 
-## 第二课
+## 第2课
 
 ### http + gjson解析
 
@@ -227,3 +227,4 @@ func main() {
 使用现成的api来编写插件
 
 [ddbot模板使用的api](https://docs.qq.com/doc/DVERZT0FrYVNEb01j)
+[图片api整合](./第2课/图片api整合.txt)
