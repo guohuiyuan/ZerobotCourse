@@ -1,0 +1,401 @@
+爬虫部分：
+
+Program.cs
+
+using dmc;
+using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Diagnostics;
+
+//建立数据库链接
+string connectStr = "server=127.0.0.1; " +
+"User Id=matsuri; password=root; " +
+"Database=matsuri;" +
+"SslMode=none;" +
+"Charset=utf8";
+
+MySqlConnection conn = new MySqlConnection(connectStr);
+conn.Open();
+//获取VTB数据
+string getvtb = Get.GetData("https://api.matsuri.icu/channel");
+//解析VTB JSON
+JObject vtbJson = (JObject)JsonConvert.DeserializeObject(getvtb);
+//获取VTB总数
+int vtbNumber = vtbJson.Value<JArray>("data").Count;
+//提示共多少VTB
+Console.WriteLine("当前Vtber总数：" + vtbNumber);
+//循环存入数据库
+for (int i = 0; i < vtbNumber; i++)
+{
+    //插入VTB
+    Console.WriteLine(connbest.insert_vtb(
+        //VTB UID
+        vtbJson["data"][i]["bilibili_uid"].ToString(),
+        //VTB 名字
+        vtbJson["data"][i]["name"].ToString(),
+        //VTB 房间ID
+        vtbJson["data"][i]["bilibili_live_room"].ToString(),
+        //VTB 最后弹幕数量
+        vtbJson["data"][i]["last_danmu"].ToString(),
+        //VTB CLIPS
+        vtbJson["data"][i]["total_clips"].ToString(),
+        //VTB 弹幕和
+        vtbJson["data"][i]["total_danmu"].ToString(),
+        //VTB 最后直播时间
+        vtbJson["data"][i]["last_live"].ToString(),
+        //数据库链接
+        conn
+        ));
+    //获取当前VTB的开播次数 主要是枚举ID
+    string getvtbC = Get.GetData("http://bh.ayud.top/dm.php?uid=" + vtbJson["data"][i]["bilibili_uid"]);
+    //解析VTB开播JSON
+    JObject vtbJsonC = (JObject)JsonConvert.DeserializeObject(getvtbC);
+    //获取VTB开播总数
+    int vtbNumberC = vtbJsonC.Value<JArray>("data").Count;
+    //如果开播数为0
+    if (vtbNumberC != 0)
+    {
+        //提示该VTB下共开播了多少次
+        Console.WriteLine("当前Vtber " + vtbJson["data"][i]["name"] + " 直播次数为：" + vtbNumberC + " 次" + " 即将进行弹幕拉取");
+        //弹幕入库
+        for (int j = 0; j < vtbNumberC; j++)
+        {
+            //获取当前id的弹幕
+            string getvtbD = Get.GetData("https://api.matsuri.icu/clip/" + vtbJsonC["data"][j]["id"] + "/comments");
+            //解析VTB 弹幕JSON
+            JObject vtbJsonB = (JObject)JsonConvert.DeserializeObject(getvtbD);
+            //获取VTB 本场直播弹幕数
+            int vtbNumberB = vtbJsonB.Value<JArray>("data").Count;
+            //提示该VTB 本场直播总弹幕数
+            Console.WriteLine("当前Vtber " + vtbJson["data"][i]["name"] + " 标题为" + vtbJsonC["data"][j]["title"] +
+                " 的弹幕总数为 " + vtbNumberB + " 开始拉取");
+            //根据当前的VTB id 值 枚举
+            for (int a = 0; a < vtbNumberB; a++)
+            {
+                try
+                {
+                    //判断是礼物还是弹幕
+                    if (vtbJsonB["data"][a]["gift_name"] == null)
+                    {
+                        //弹幕
+                        Console.WriteLine(a + " " + connbest.insert_dm(
+                            //主播UID
+                            vtbJson["data"][i]["bilibili_uid"].ToString(),
+                            //本场直播标题名
+                            vtbJsonC["data"][j]["title"].ToString(),
+                            //主播名称
+                            vtbJson["data"][i]["name"].ToString(),
+                            //弹幕时间
+                            vtbJsonB["data"][a]["time"].ToString(),
+                            //用户名称
+                            vtbJsonB["data"][a]["username"].ToString(),
+                            //用户UID
+                            vtbJsonB["data"][a]["user_id"].ToString(),
+                            //弹幕内容
+                            vtbJsonB["data"][a]["text"].ToString(),
+                            //连接数据库
+                            conn
+                            ));
+                    }
+                    else
+                    {
+                        //礼物
+                        Console.WriteLine(a + " " + connbest.insert_gift(
+                            //主播UID
+                            vtbJson["data"][i]["bilibili_uid"].ToString(),
+                            //本场直播标题名
+                            vtbJsonC["data"][j]["title"].ToString(),
+                            //主播名称
+                            vtbJson["data"][i]["name"].ToString(),
+                            //送礼时间
+                            vtbJsonB["data"][a]["time"].ToString(),
+                            //送礼金额
+                            vtbJsonB["data"][a]["gift_price"].ToString(),
+                            //礼物数量
+                            vtbJsonB["data"][a]["gift_num"].ToString(),
+                            //送礼人UID
+                            vtbJsonB["data"][a]["user_id"].ToString(),
+                            //送礼人UNAME
+                            vtbJsonB["data"][a]["username"].ToString(),
+                            //礼物名称
+                            vtbJsonB["data"][a]["gift_name"].ToString(),
+                            //数据库链接
+                            conn
+                            ));
+                    }
+                }
+                catch
+                {
+
+                }
+                Thread.Sleep(5);
+            }
+        }
+    }
+    else
+    {
+        Console.WriteLine("跳过该主播，重新拉取");
+    }
+}
+//关闭数据库链接
+conn.Close();
+
+Get.cs
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace dmc
+{
+    internal class Get
+    {
+        public static String GetData(String url)
+        {
+            while (true)
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                request.Method = "GET";
+                request.ContentType = "text/html, application/xhtml+xml, */*";
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                Stream rs = response.GetResponseStream();
+                StreamReader sr = new StreamReader(rs, Encoding.UTF8);
+                var result = sr.ReadToEnd();
+                sr.Close();
+                rs.Close();
+                return result;
+            }
+            catch
+            {
+                Console.WriteLine("失败！正在重试~");
+            }
+        }
+    }
+}
+
+connbest.cs
+
+using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace dmc
+{
+    internal class connbest
+    {
+
+        /// <summary>
+        /// 插入VTB数据
+        /// </summary>
+        /// <param name="vtbuid"></param>
+        /// <param name="vtbuname"></param>
+        /// <param name="vtbroomid"></param>
+        /// <param name="vtbdm"></param>
+        /// <param name="vtbclips"></param>
+        /// <param name="vtbdmz"></param>
+        /// <param name="vtbllivetime"></param>
+        /// <param name="conn"></param>
+        /// <returns></returns>
+        public static string insert_vtb(string vtbuid, string vtbuname, string vtbroomid,string vtbdm, string vtbclips, string vtbdmz,string vtbllivetime, MySqlConnection conn)
+        {
+            string sql = 
+                "INSERT INTO `matsuri`.`vtb` (`vtbuid`, `vtbuname`, `vtbroomid`, `vtbdm`, `vtbclips`, `vtbdmz`, `vtbllivetime`) " +
+                "VALUES ('"+ vtbuid +"', '"+ vtbuname + "', '"+ vtbroomid + "', '"+ vtbdm + "', '"+ vtbclips + "', '"+ vtbdmz + "', '"+ vtbllivetime + "')";
+            try
+            {
+                //创建Command对象
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                //执行
+                cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+                //失败返回0
+                return "当前" + vtbuname + " "+vtbuid + "数据插入失败";
+            }
+            return "当前" + vtbuname + " " + vtbuid + "数据插入成功";
+        }
+
+        /// <summary>
+        /// 插入弹幕数据
+        /// </summary>
+        /// <param name="zbuid"></param>
+        /// <param name="zbtitle"></param>
+        /// <param name="zbname"></param>
+        /// <param name="vtbdm"></param>
+        /// <param name="uname"></param>
+        /// <param name="uid"></param>
+        /// <param name="vtbllivetime"></param>
+        /// <param name="conn"></param>
+        /// <returns></returns>
+        public static string insert_dm(string zbuid, string zbtitle, string zbname, string dmtime, string uname, string uid, string dmtext, MySqlConnection conn)
+        {
+            string sql =
+                "INSERT INTO `matsuri`.`dm` (`zbuid`, `zbtitle`, `zbname`, `dmtime`, `uname`, `uid`, `dmtext`) " +
+                "VALUES ('"+ zbuid + "', '"+ zbtitle + "', '"+ zbname + "', '"+ dmtime + "', '"+ uname + "', '"+ uid + "', '"+ dmtext + "')";
+            try
+            {
+                //创建Command对象
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                //执行
+                cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+                //失败返回
+                return "弹幕" + dmtext + " " + uid + "数据插入失败";
+            }
+            return "弹幕" + dmtext + " " + uid + "数据插入成功";
+        }
+
+        /// <summary>
+        /// 插入礼物数据
+        /// </summary>
+        /// <param name="zbuid"></param>
+        /// <param name="zbtitle"></param>
+        /// <param name="zbname"></param>
+        /// <param name="gifttime"></param>
+        /// <param name="giftprice"></param>
+        /// <param name="giftnum"></param>
+        /// <param name="giftuid"></param>
+        /// <param name="giftuname"></param>
+        /// <param name="conn"></param>
+        /// <returns></returns>
+        public static string insert_gift(string zbuid, string zbtitle, string zbname, string gifttime, string giftprice, string giftnum ,string giftuid, string giftuname, string giftname , MySqlConnection conn) 
+        {
+            string sql =
+                "INSERT INTO `matsuri`.`gift` (`zbuid`, `zbtitle`, `zbname`, `gifttime`, `giftprice`, `giftnum`, `giftuid`, `giftuname`, `giftname`) " +
+                "VALUES ('"+ zbuid + "', '"+ zbtitle + "', '"+ zbname + "', '"+ gifttime + "', '"+ giftprice + "', '"+ giftnum + "', '" + giftuid + "', '" + giftuname + "', '" + giftname + "')";
+            try
+            {
+                //创建Command对象
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                //执行
+                cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+                //失败返回0
+                return "礼物" + giftuname + " " + giftuid + "数据插入失败";
+            }
+            return "礼物" + giftuname + " " + giftuid + "数据插入成功";
+        }
+    }
+}
+
+Redis管道传输弹幕、礼物同理：
+
+redis.php
+
+<?php
+$redis = new Redis();
+$redis->connect('127.0.0.1',6379)or die( "could net connect redis server" );
+//选择1号库删除
+$redis->select(1);
+$redis->flushdb();
+
+//管道连接
+$pie = $redis->multi(Redis::PIPELINE);
+
+$servername = "127.0.0.1";
+$username = "matsuri";
+$password = "root";
+
+// 创建连接
+$conn = new mysqli($servername, $username, $password);
+$sql = 'SELECT * FROM matsuri.dm';
+$result = mysqli_query($conn,$sql);
+
+while ( $row = mysqli_fetch_assoc($result) ){
+    json_encode($row, JSON_UNESCAPED_UNICODE);
+    $id = $row['uid'];
+    $redis->lpush($id, 
+ json_encode(array(
+     'time' => $row['dmtime'],
+     'zbname' => $row['zbname'],
+     'zbuid'=>$row['zbuid'],
+     'text'=>$row['dmtext']
+    )
+  )
+);
+}
+$replies = $pie->exec();
+$redis->close();
+echo "DONE"; 
+?>
+
+PHP指定日期枚举：
+
+<?php
+//拿到BILIBILI UID
+$uid = $_GET['uid'];
+
+$getJson = json_decode(get("https://api.matsuri.icu/channel/$uid/clips",true),true);
+//昨日日期
+$day = date("Y-m-d",strtotime("-1 day"));
+//今天日期
+$today = date("Y-m-d");
+//获取昨天0点日期时间戳
+$datem = getDateToMesc("$day 00:00:00");
+//获取当天0点时间戳
+$todaym = getDateToMesc("$today 00:00:00");
+
+$array = array(
+    'data' => array(
+        )
+    );
+//统计数量
+for ($i = 0; $i < count($getJson["data"]); $i++) 
+{
+    //先判断是否正在直播 正在直播不取
+    if($getJson["data"][$i]["total_danmu"] != ""){
+        //昨天0 - 今天0
+        if($getJson["data"][$i]["start_time"] > $datem and $getJson["data"][$i]["start_time"] < $todaym){
+            $array['data'][] = $getJson["data"][$i];
+        }
+    }
+}
+
+header('Content-Type: application/json');
+echo urldecode(json_encode($array));
+exit;
+
+//GET请求
+function get($url, $cookie) {//url为必传、若无cookie则传空字符串
+  if (empty($url)) {
+         return false;
+     }
+     $ch = curl_init();//初始化curl
+     curl_setopt($ch, CURLOPT_URL,$url);//抓取指定网页
+     curl_setopt($ch, CURLOPT_HEADER, 0);//设置header
+     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//要求结果为字符串且输出到屏幕上
+	 if(strpos($url, 'https://')!== false){  //判断请求协议http或https
+     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // 跳过证书检查
+     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);  // 从证书中检查SSL加密算法是否存在
+	 }
+	 curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']); // 模拟用户使用的浏览器
+	 if(!empty($cookie))curl_setopt($ch,CURLOPT_COOKIE,$cookie);  //设置cookie
+     $data = curl_exec($ch);//运行curl
+     curl_close($ch);
+     return $data;
+}
+//日期转毫秒
+ /**
+     * 日期转毫秒
+     */
+     function getDateToMesc($mescdate)
+    {
+        list($usec, $sec) = explode(".", $mescdate);
+        $date = strtotime($usec);
+        $return_data = str_pad($date.$sec,13,"0",STR_PAD_RIGHT);
+        return $msectime = $return_data;
+    }
+?>

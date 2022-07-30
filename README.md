@@ -8,28 +8,30 @@ zerobot框架教学入门
 本课程适用于一些喜欢编程, 想要开发自己的qq机器人, 最好是有一门编程语言基础的人~~计算机大一新生~~
 
 - [ZerobotCourse](#zerobotcourse)
-  - [为什么选择zerobot作为qqbot开发框架](#为什么选择zerobot作为qqbot开发框架)
-  - [第0课](#第0课)
-    - [开发环境搭建](#开发环境搭建)
-    - [需要以下工具](#需要以下工具)
-    - [步骤](#步骤)
-    - [参考](#参考)
-  - [第1课](#第1课)
-    - [了解zerobot框架](#了解zerobot框架)
-    - [helloworld](#helloworld)
-    - [示例代码](#示例代码)
-    - [匹配器](#匹配器)
-    - [规则](#规则)
-    - [cqhttp API](#cqhttp-api)
-    - [消息](#消息)
-    - [持续对话](#持续对话)
-  - [第2课](#第2课)
-    - [http + gjson解析](#http--gjson解析)
-    - [http + json.Unmarshal 解析](#http--jsonunmarshal-解析)
-    - [gjson](#gjson)
-    - [api实践](#api实践)
-      - [apifox使用](#apifox使用)
-      - [练习](#练习)
+	- [为什么选择zerobot作为qqbot开发框架](#为什么选择zerobot作为qqbot开发框架)
+	- [第0课](#第0课)
+		- [开发环境搭建](#开发环境搭建)
+		- [需要以下工具](#需要以下工具)
+		- [步骤](#步骤)
+		- [参考](#参考)
+	- [第1课](#第1课)
+		- [了解zerobot框架](#了解zerobot框架)
+		- [helloworld](#helloworld)
+		- [示例代码](#示例代码)
+		- [匹配器](#匹配器)
+		- [规则](#规则)
+		- [cqhttp API](#cqhttp-api)
+		- [消息](#消息)
+		- [持续对话](#持续对话)
+	- [第2课](#第2课)
+		- [http + gjson解析](#http--gjson解析)
+		- [http + json.Unmarshal 解析](#http--jsonunmarshal-解析)
+		- [gjson](#gjson)
+		- [api实践](#api实践)
+			- [apifox使用](#apifox使用)
+			- [练习](#练习)
+			- [示例](#示例)
+	- [第3课](#第3课)
 
 ## 第0课
 
@@ -228,3 +230,67 @@ func main() {
 
 [ddbot模板使用的api](https://docs.qq.com/doc/DVERZT0FrYVNEb01j)
 [图片api整合](./第2课/图片api整合.txt)
+
+#### 示例
++
+```
+// Package tiangou2 舔狗日记
+package tiangou2
+
+import (
+	"fmt"
+
+	ctrl "github.com/FloatTech/zbpctrl"
+	"github.com/FloatTech/zbputils/control"
+	"github.com/FloatTech/zbputils/web"
+	zero "github.com/wdvxdr1123/ZeroBot"
+	"github.com/wdvxdr1123/ZeroBot/message"
+)
+
+const (
+	tiangouURL = "http://bh.ayud.top/tg?qq=%v"
+)
+
+func init() {
+	engine := control.Register("tiangou2", &ctrl.Options[*zero.Ctx]{
+		DisableOnDefault: false,
+		Help:             "舔狗日记\n- 舔狗123456",
+	})
+	engine.OnRegex(`^舔狗\s?(\d+)$`).SetBlock(true).Handle(func(ctx *zero.Ctx) {
+		regexMatched := ctx.State["regex_matched"].([]string)
+		ctx.SendChain(message.Text(regexMatched[1]))
+		data, err := web.GetData(fmt.Sprintf(tiangouURL, regexMatched[1]))
+		if err != nil {
+			ctx.SendChain(message.Text("Error:", err))
+		}
+		ctx.SendChain(message.ImageBytes(data))
+	})
+}
+
+```
+
+## 第3课
+
+本节课是临时插入的
+
+之前用chromedp截图,发现linux安装chrome真的太消耗资源的,所以弃用了浏览器截图
+
+现在听别人说playwright挺好用,然后我又发现了playwright-go,所以我想用这个库做浏览器截图
+
+go下载playwright
+
+```
+go install github.com/playwright-community/playwright-go/cmd/playwright@latest
+playwright install --with-deps
+```
+
+linux安装的时候,如果是centos系统还要安装apt-get
+
+```
+curl https://raw.githubusercontent.com/dvershinin/apt-get-centos/master/apt-get.sh -o /usr/local/bin/apt-get
+
+chmod 0755 /usr/local/bin/apt-get
+```
+
+[插件代码](https://github.com/FloatTech/ZeroBot-Plugin-Playground/blob/main/playwright/playwright.go)
+
