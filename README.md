@@ -31,7 +31,10 @@ zerobot框架教学入门
 			- [apifox使用](#apifox使用)
 			- [练习](#练习)
 			- [示例](#示例)
-	- [第3课](#第3课)
+	- [插播](#插播)
+	- [第三课](#第三课)
+		- [FloatTech/sqlite](#floattechsqlite)
+		- [gorm](#gorm)
 
 ## 第0课
 
@@ -77,6 +80,8 @@ zerobot框架教学入门
 
 
 ## 第1课
+
+本节课主要讲的是zerobot框架和第一个插件的添加
 
 ### 了解zerobot框架
 在我看, zerobot框架和那些web框架挺相似的, 不过zerobot是用的websocket, 是双向的, 而web框架是的使用http, 是单向.
@@ -150,6 +155,8 @@ go run main.go
 
 
 ## 第2课
+
+本节课主要讲的是api的使用
 
 ### http + gjson解析
 
@@ -269,9 +276,7 @@ func init() {
 
 ```
 
-## 第3课
-
-本节课是临时插入的
+## 插播
 
 之前用chromedp截图,发现linux安装chrome真的太消耗资源的,所以弃用了浏览器截图
 
@@ -281,6 +286,7 @@ go下载playwright
 
 ```
 go install github.com/playwright-community/playwright-go/cmd/playwright@latest
+# centos7适用,centos8用不了
 playwright install --with-deps
 ```
 
@@ -294,3 +300,23 @@ chmod 0755 /usr/local/bin/apt-get
 
 [插件代码](https://github.com/FloatTech/ZeroBot-Plugin-Playground/blob/main/playwright/playwright.go)
 
+
+## 第三课
+
+本节课主要数据库的使用
+
+zbp目前存在两个数据库框架,一种是自用简易框架---FloatTech/sqlite,一种是gorm
+
+我墙裂推荐gorm
+
+### FloatTech/sqlite
+
+[示例代码](https://github.com/FloatTech/ZeroBot-Plugin/blob/master/plugin/book_review/model.go)
+
+### gorm
+
+gorm需要自己封装一个类型
+
+[示例代码](https://github.com/FloatTech/ZeroBot-Plugin/blob/master/plugin/sleep_manage/model.go)
+
+[学习教程](https://www.topgoer.com/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C/gorm/gorm%E7%94%A8%E6%B3%95%E4%BB%8B%E7%BB%8D.html)
