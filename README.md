@@ -9,12 +9,12 @@ zerobot框架教学入门
 
 - [ZerobotCourse](#zerobotcourse)
 	- [为什么选择zerobot作为qqbot开发框架](#为什么选择zerobot作为qqbot开发框架)
-	- [第0课](#第0课)
+	- [第0课-golang开发环境搭建](#第0课-golang开发环境搭建)
 		- [开发环境搭建](#开发环境搭建)
 		- [需要以下工具](#需要以下工具)
 		- [步骤](#步骤)
 		- [参考](#参考)
-	- [第1课](#第1课)
+	- [第1课-zerobot框架以及示例插件](#第1课-zerobot框架以及示例插件)
 		- [了解zerobot框架](#了解zerobot框架)
 		- [helloworld](#helloworld)
 		- [示例代码](#示例代码)
@@ -23,7 +23,7 @@ zerobot框架教学入门
 		- [cqhttp API](#cqhttp-api)
 		- [消息](#消息)
 		- [持续对话](#持续对话)
-	- [第2课](#第2课)
+	- [第2课-api使用](#第2课-api使用)
 		- [http + gjson解析](#http--gjson解析)
 		- [http + json.Unmarshal 解析](#http--jsonunmarshal-解析)
 		- [gjson](#gjson)
@@ -31,12 +31,16 @@ zerobot框架教学入门
 			- [apifox使用](#apifox使用)
 			- [练习](#练习)
 			- [示例](#示例)
-	- [插播](#插播)
-	- [第三课](#第三课)
+	- [插播-playwright](#插播-playwright)
+	- [第3课-数据库使用](#第3课-数据库使用)
 		- [FloatTech/sqlite](#floattechsqlite)
 		- [gorm](#gorm)
+	- [第4课-gg库绘图](#第4课-gg库绘图)
+	- [第5课-制作表情包](#第5课-制作表情包)
+	- [第6课-爬虫教学](#第6课-爬虫教学)
+	- [第7课-api服务器搭建](#第7课-api服务器搭建)
 
-## 第0课
+## 第0课-golang开发环境搭建
 
 ### 开发环境搭建
 
@@ -79,7 +83,7 @@ zerobot框架教学入门
 5. [zerobot-plugin江林版](https://github.com/Jiang-Red/ZeroBot-Plugin)
 
 
-## 第1课
+## 第1课-zerobot框架以及示例插件
 
 本节课主要讲的是zerobot框架和第一个插件的添加
 
@@ -154,7 +158,7 @@ go run main.go
 [对话参考代码](https://github.com/FloatTech/ZeroBot-Plugin/blob/master/plugin/wordle/wordle.go)
 
 
-## 第2课
+## 第2课-api使用
 
 本节课主要讲的是api的使用
 
@@ -276,7 +280,7 @@ func init() {
 
 ```
 
-## 插播
+## 插播-playwright
 
 之前用chromedp截图,发现linux安装chrome真的太消耗资源的,所以弃用了浏览器截图
 
@@ -301,7 +305,7 @@ chmod 0755 /usr/local/bin/apt-get
 [插件代码](https://github.com/FloatTech/ZeroBot-Plugin-Playground/blob/main/playwright/playwright.go)
 
 
-## 第三课
+## 第3课-数据库使用
 
 本节课主要数据库的使用
 
@@ -320,3 +324,23 @@ gorm需要自己封装一个类型
 [示例代码](https://github.com/FloatTech/ZeroBot-Plugin/blob/master/plugin/sleep_manage/model.go)
 
 [学习教程](https://www.topgoer.com/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C/gorm/gorm%E7%94%A8%E6%B3%95%E4%BB%8B%E7%BB%8D.html)
+
+
+## 第4课-gg库绘图
+
+本节课讲gg库绘图
+
+## 第5课-制作表情包
+
+本节课使用gg等图像库制作表情包
+
+## 第6课-爬虫教学
+
+爬虫教学(http,xpath,goroutine,数据库)
+
+## 第7课-api服务器搭建
+
+api服务器搭建(beego,数据库)
+
+
+
