@@ -33,6 +33,8 @@ zerobot框架教学入门
 			- [示例](#示例)
 	- [插播-playwright](#插播-playwright)
 	- [第3课-数据库使用](#第3课-数据库使用)
+		- [sqlite](#sqlite)
+		- [数据库框架](#数据库框架)
 		- [FloatTech/sqlite](#floattechsqlite)
 		- [gorm](#gorm)
 	- [第4课-gg库绘图](#第4课-gg库绘图)
@@ -308,6 +310,15 @@ chmod 0755 /usr/local/bin/apt-get
 ## 第3课-数据库使用
 
 本节课主要数据库的使用
+
+### sqlite
+zbp使用的数据库是sqlite
+
+SQLite是一个进程内的库，实现了自给自足的、无服务器的、零配置的、事务性的 SQL 数据库引擎。它是一个零配置的数据库，这意味着与其他数据库不一样，您不需要在系统中配置。
+
+简单就是本地数据库,sqlite让zbp没有对数据库的依赖
+
+### 数据库框架
 
 zbp目前存在两个数据库框架,一种是自用简易框架---FloatTech/sqlite,一种是gorm
 
