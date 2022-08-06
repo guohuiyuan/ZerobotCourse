@@ -1,5 +1,6 @@
 # ZerobotCourse
-zerobot框架教学入门
+zerobot框架教学 
+qq学习群: 861901070
 
 ## 为什么选择zerobot作为qqbot开发框架
 1. go语言本身的优势
@@ -37,6 +38,7 @@ zerobot框架教学入门
 		- [数据库框架](#数据库框架)
 		- [FloatTech/sqlite](#floattechsqlite)
 		- [gorm](#gorm)
+		- [小作文示例代码](#小作文示例代码)
 	- [第4课-gg库绘图](#第4课-gg库绘图)
 	- [第5课-制作表情包](#第5课-制作表情包)
 	- [第6课-爬虫教学](#第6课-爬虫教学)
@@ -336,6 +338,59 @@ gorm需要自己封装一个类型
 
 [学习教程](https://www.topgoer.com/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C/gorm/gorm%E7%94%A8%E6%B3%95%E4%BB%8B%E7%BB%8D.html)
 
+### 小作文示例代码
+
+```
+package main
+
+import (
+	"fmt"
+	"time"
+
+	sql "github.com/FloatTech/sqlite"
+)
+
+type article struct {
+	ID         int64  `db:"id"`
+	Title      string `db:"title"`
+	Author     string `db:"author"`
+	CreateTime string `db:"createTime"`
+	Content    string `db:"content"`
+}
+
+var db = &sql.Sqlite{}
+
+// 暂时随机选择一个小作文
+func getArticleByKeyword(keyword string) (a article) {
+	_ = db.Find("main", &a, "where content LIKE '%"+keyword+"%'")
+	return
+}
+
+func getRandomArticle() (a article) {
+	_ = db.Pick("main", &a)
+	return
+}
+
+func main() {
+	db.DBPath = "小作文.db"
+	err := db.Open(time.Hour * 24)
+	if err != nil {
+		fmt.Println(err)
+	}
+	err = db.Create("main", &article{})
+	if err != nil {
+		fmt.Println(err)
+	}
+	n, err := db.Count("main")
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("一共有", n, "条记录")
+	a := getRandomArticle()
+	fmt.Printf("%+v\n", a)
+}
+
+```
 
 ## 第4课-gg库绘图
 
