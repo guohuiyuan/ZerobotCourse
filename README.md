@@ -40,6 +40,9 @@ qq学习群: 861901070
 		- [gorm](#gorm)
 		- [小作文示例代码](#小作文示例代码)
 	- [第4课-gg库绘图](#第4课-gg库绘图)
+		- [如何学习第三方库](#如何学习第三方库)
+		- [10进制数转为rbg格式](#10进制数转为rbg格式)
+		- [通过gg库的单元测试, 学习gg库的使用](#通过gg库的单元测试-学习gg库的使用)
 	- [第5课-制作表情包](#第5课-制作表情包)
 	- [第6课-爬虫教学](#第6课-爬虫教学)
 	- [第7课-api服务器搭建](#第7课-api服务器搭建)
@@ -394,7 +397,86 @@ func main() {
 
 ## 第4课-gg库绘图
 
-本节课讲gg库绘图
+### 如何学习第三方库
+因为zbp不接入浏览器渲染, 所以只能使用2d进行画图, 而我们最常使用的2d画图库就是gg库
+
+所以本节课讲gg库绘图
+
+使用gg库画图既是技术活更是体力活, 需要你定位所有图像的位置, 非常折磨
+
+一般我们学习go第三方库, 最快的方法就是看第三方库的作者写的example, 那可能有人要问了为啥不去看别人写的技术博客?
+有两个原因, 第一, 找技术博客比较麻烦, 第二, 有些库冷到根本没有技术文档, 需要我们多多阅读源码
+
+
+### 10进制数转为rbg格式
+
+做bilibili查成分的时候碰到了一个问题就是把10进制数转为rbg格式
+
+```
+package main
+
+import (
+	"encoding/binary"
+	"fmt"
+	"strconv"
+	"strings"
+)
+
+var (
+	testcolor = 1725515
+)
+
+func main() {
+	fmt.Print("int2rbg测试结果:")
+	fmt.Println(int2rbg(int64(testcolor)))
+	colorHex := strconv.FormatInt(int64(testcolor), 16)
+	fmt.Println("十六进制测试结果:", colorHex)
+	fmt.Print("parseHexColor测试结果:")
+	fmt.Println(parseHexColor(colorHex))
+}
+
+func int2rbg(t int64) (int64, int64, int64) {
+	var buf [8]byte
+	binary.LittleEndian.PutUint64(buf[:], uint64(t))
+	b, g, r := int64(buf[0]), int64(buf[1]), int64(buf[2])
+	return r, g, b
+}
+
+func parseHexColor(x string) (r, g, b, a int) {
+	x = strings.TrimPrefix(x, "#")
+	a = 255
+	if len(x) == 3 {
+		format := "%1x%1x%1x"
+		fmt.Sscanf(x, format, &r, &g, &b)
+		r |= r << 4
+		g |= g << 4
+		b |= b << 4
+	}
+	if len(x) == 6 {
+		format := "%02x%02x%02x"
+		fmt.Sscanf(x, format, &r, &g, &b)
+	}
+	if len(x) == 8 {
+		format := "%02x%02x%02x%02x"
+		fmt.Sscanf(x, format, &r, &g, &b, &a)
+	}
+	return
+}
+```
+
+```
+func (dc *Context) SetHexColor(x string) {
+	r, g, b, a := parseHexColor(x)
+	dc.SetRGBA255(r, g, b, a)
+}
+```
+
+自己做了一个int2rbg, 后面了解gg库里处理16进制数, 有一个parseHexColor方法, 测试证明这两种转化方式一样
+
+### 通过gg库的单元测试, 学习gg库的使用
+gg库的单元测试是在[context_test.go](https://github.com/fogleman/gg/blob/master/context_test.go)中的
+
+
 
 ## 第5课-制作表情包
 
