@@ -43,6 +43,16 @@ qq学习群: 861901070
 		- [如何学习第三方库](#如何学习第三方库)
 		- [10进制数转为rbg格式](#10进制数转为rbg格式)
 		- [通过gg库的单元测试, 学习gg库的使用](#通过gg库的单元测试-学习gg库的使用)
+		- [gg示例](#gg示例)
+			- [画一个透明图片](#画一个透明图片)
+			- [画一个白色背景](#画一个白色背景)
+			- [gg加载图片](#gg加载图片)
+			- [gg写字](#gg写字)
+			- [gg画长方形](#gg画长方形)
+			- [image库裁剪](#image库裁剪)
+			- [gg库倒过来](#gg库倒过来)
+			- [gg库矩阵变换](#gg库矩阵变换)
+			- [gg画一个遮罩](#gg画一个遮罩)
 	- [第5课-制作表情包](#第5课-制作表情包)
 	- [第6课-爬虫教学](#第6课-爬虫教学)
 	- [第7课-api服务器搭建](#第7课-api服务器搭建)
@@ -247,10 +257,11 @@ func main() {
 使用现成的api来编写插件
 
 [ddbot模板使用的api](https://docs.qq.com/doc/DVERZT0FrYVNEb01j)
+
 [图片api整合](./第2课/图片api整合.txt)
 
 #### 示例
-+
+
 ```
 // Package tiangou2 舔狗日记
 package tiangou2
@@ -476,7 +487,220 @@ func (dc *Context) SetHexColor(x string) {
 ### 通过gg库的单元测试, 学习gg库的使用
 gg库的单元测试是在[context_test.go](https://github.com/fogleman/gg/blob/master/context_test.go)中的
 
+### gg示例
 
+推荐阅读
+[go原生image库画图](https://www.cnblogs.com/Finley/p/16589798.html)
+
+从一个地方看到的, 感觉指针可以直接转
+将image.Image转换成 *image.RGBA
+```
+func ImageToRGBA(src image.Image) *image.RGBA {
+	bounds := src.Bounds()
+	dst := image.NewRGBA(bounds)
+	draw.Draw(dst, bounds, src, bounds.Min, draw.Src)
+	return dst
+}
+```
+
+#### 画一个透明图片
+
+```
+package main
+
+import "github.com/fogleman/gg"
+
+func main() {
+	dc := gg.NewContext(100, 100)
+	dc.SavePNG("out.png")
+}
+```
+
+#### 画一个白色背景
+
+```
+package main
+
+import (
+	"image/color"
+
+	"github.com/fogleman/gg"
+)
+
+func main() {
+	dc := gg.NewContext(200, 100)
+	dc.SetColor(color.White)
+	dc.Clear()
+	dc.SavePNG("out.png")
+}
+
+```
+
+#### gg加载图片
+
+```
+package main
+
+import (
+	"fmt"
+
+	"github.com/fogleman/gg"
+)
+
+func main() {
+	dc := gg.NewContext(4000, 2000)
+	back, err := gg.LoadImage("原神.jpg")
+	if err != nil {
+		fmt.Println(err)
+	}
+	dc.DrawImage(back, 500, 0)
+	dc.SavePNG("out.png")
+}
+
+```
+
+#### gg写字
+
+```
+package main
+
+import (
+	"github.com/fogleman/gg"
+)
+
+func main() {
+	dc := gg.NewContext(1024, 1024)
+	dc.SetRGB(1, 1, 1)
+	dc.Clear()
+	dc.SetRGB(0, 0, 0)
+	if err := dc.LoadFontFace("font/regular-bold.ttf", 50); err != nil {
+		panic(err)
+	}
+	dc.DrawString("你好", 0, 50)
+	dc.SavePNG("out.png")
+}
+
+```
+
+#### gg画长方形
+
+```
+package main
+
+import (
+	"github.com/fogleman/gg"
+)
+
+func main() {
+	dc := gg.NewContext(1024, 1024)
+	dc.SetRGB(1, 1, 1)
+	dc.Clear()
+	dc.DrawRectangle(200, 100, 400, 200)
+	dc.SetRGB(0, 0, 0)
+	dc.Fill()
+	dc.SavePNG("out.png")
+}
+
+```
+
+#### image库裁剪
+
+```
+package main
+
+import (
+	"fmt"
+	"image"
+	"os"
+
+	"github.com/FloatTech/floatbox/img/writer"
+	"github.com/fogleman/gg"
+)
+
+func main() {
+	dc := gg.NewContext(4000, 2000)
+	back, err := gg.LoadImage("原神.jpg")
+	if err != nil {
+		fmt.Println(err)
+	}
+	dc.DrawImage(back, 0, 0)
+	im := dc.Image().(*image.RGBA)
+	nim := im.SubImage(image.Rect(0, 0, 1000, 100))
+	f, err := os.Create("out.png")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	_, err = writer.WriteTo(nim, f)
+	_ = f.Close()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+}
+
+```
+
+#### gg库倒过来
+
+```
+package main
+
+import (
+	"fmt"
+
+	"github.com/fogleman/gg"
+)
+
+func main() {
+	dc := gg.NewContext(4000, 2000)
+	back, err := gg.LoadImage("原神.jpg")
+	if err != nil {
+		fmt.Println(err)
+	}
+	dc.InvertY()
+	dc.DrawImage(back, 2000, 0)
+	dc.SavePNG("out.png")
+}
+```
+
+#### gg库矩阵变换
+gg.Scale(0.5,0.5) 意思是让后面的矩阵长宽缩短一半
+gg库绕某个点旋转
+shearAbout可以把图片变成平行四边形, 用于透视变换
+
+```
+package main
+
+import (
+	"fmt"
+
+	"github.com/fogleman/gg"
+)
+
+func main() {
+	dc := gg.NewContext(4000, 2000)
+	back, err := gg.LoadImage("原神.jpg")
+	if err != nil {
+		fmt.Println(err)
+	}
+	dc.Scale(0.5, 0.5)
+	dc.ShearAbout(0.5, 0, 2000, 1000)
+	// dc.ShearAbout(0, 0.5, 2000, 1000)
+	for i := 0; i <= 9; i++ {
+		dc.DrawImage(back, 2000, 1000)
+		dc.RotateAbout(gg.Radians(float64(10)), 2000, 1000)
+	}
+	dc.SavePNG("out.png")
+}
+
+```
+
+#### gg画一个遮罩
+
+```
+待定
+```
 
 ## 第5课-制作表情包
 
