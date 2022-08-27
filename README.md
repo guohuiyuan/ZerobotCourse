@@ -490,9 +490,13 @@ gg库的单元测试是在[context_test.go](https://github.com/fogleman/gg/blob/
 ### gg示例
 
 推荐阅读
+
 [go原生image库画图](https://www.cnblogs.com/Finley/p/16589798.html)
 
+[go字符画](https://blog.csdn.net/ccboy2009/article/details/77803471)
+
 从一个地方看到的, 感觉指针可以直接转
+
 将image.Image转换成 *image.RGBA
 ```
 func ImageToRGBA(src image.Image) *image.RGBA {
@@ -666,7 +670,9 @@ func main() {
 
 #### gg库矩阵变换
 gg.Scale(0.5,0.5) 意思是让后面的矩阵长宽缩短一半
+
 gg库绕某个点旋转
+
 shearAbout可以把图片变成平行四边形, 用于透视变换
 
 ```
