@@ -710,6 +710,67 @@ func main() {
 
 ## 第5课-制作表情包
 
+实际就是用代码去重现图片编辑软件的操作
+
+1. 准备背景图片
+
+- 抠图
+
+- ~~找别人抠好的素材~~
+
+- 网站智能抠图 
+
+2. 使用图像库进行图形变换
+
+- 主要使用"github.com/FloatTech/zbputils/img"库进行图像变换
+  
+(zbp的例子)[https://github.com/FloatTech/ZeroBot-Plugin/blob/master/plugin/gif/png.go]
+
+```
+// roll 滚
+func roll(cc *context, value ...string) (string, error) {
+	// 下载背景图片到本地
+	_ = value
+	var wg sync.WaitGroup
+	var err error
+	var m sync.Mutex
+	piclen := 8
+	name := cc.usrdir + "roll.gif"
+	c := dlrange("roll", piclen, &wg, func(e error) {
+		m.Lock()
+		err = e
+		m.Unlock()
+	})
+	wg.Wait()
+	if err != nil {
+		return "", err
+	}
+
+	// 加载用户头像
+	im, err := img.LoadFirstFrame(cc.headimgsdir[0], 210, 210)
+	if err != nil {
+		return "", err
+	}
+
+	// 定义用户头像的变换
+	locs := [][]int{{87, 77, 0}, {96, 85, -45}, {92, 79, -90}, {92, 78, -135}, {92, 75, -180}, {92, 75, -225}, {93, 76, -270}, {90, 80, -315}}
+
+	// 加载背景图片
+	imgs, err := loadFirstFrames(c, piclen)
+	if err != nil {
+		return "", err
+	}
+	roll := make([]*image.NRGBA, piclen)
+	for i := 0; i < piclen; i++ {
+		// 实际变换, 在背景图底下插入变换位置的头像,
+		roll[i] = imgs[i].InsertBottomC(img.Rotate(im.Im, float64(locs[i][2]), 0, 0).Im, 0, 0, locs[i][0]+105, locs[i][1]+105).Im
+	}
+
+	// 返回制作好的gif
+	return "file:///" + name, writer.SaveGIF2Path(name, img.MergeGif(7, roll))
+}
+```
+
 本节课使用gg等图像库制作表情包
 
 ## 第6课-爬虫教学
