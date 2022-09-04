@@ -781,6 +781,8 @@ func roll(cc *context, value ...string) (string, error) {
 
 [素材](第5课/0.png)
 
+[图片定位](https://github.com/Mannix1994/PointsPicker)
+
 ```
 // zhongjilieshou 终极猎手
 func zhongjilieshou(cc *context, args ...string) (string, error) {
