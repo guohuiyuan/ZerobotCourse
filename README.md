@@ -54,6 +54,8 @@ qq学习群: 861901070
 			- [gg库矩阵变换](#gg库矩阵变换)
 			- [gg画一个遮罩](#gg画一个遮罩)
 	- [第5课-制作表情包](#第5课-制作表情包)
+		- [步骤](#步骤-1)
+		- [例子-终极猎手](#例子-终极猎手)
 	- [第6课-爬虫教学](#第6课-爬虫教学)
 	- [第7课-api服务器搭建](#第7课-api服务器搭建)
 
@@ -712,13 +714,15 @@ func main() {
 
 实际就是用代码去重现图片编辑软件的操作
 
+### 步骤
+
 1. 准备背景图片
 
-- 抠图
+- [抠图](https://ps.gaoding.com/#/) 
 
-- ~~找别人抠好的素材~~
+- [~~找别人抠好的素材~~](https://github.com/noneplugin/nonebot-plugin-petpet)
 
-- 网站智能抠图 
+- [网站智能抠图](https://www.remove.bg/zh) 
 
 2. 使用图像库进行图形变换
 
@@ -772,6 +776,40 @@ func roll(cc *context, value ...string) (string, error) {
 ```
 
 本节课使用gg等图像库制作表情包
+
+### 例子-终极猎手
+
+[素材](第5课/0.png)
+
+```
+// zhongjilieshou 终极猎手
+func zhongjilieshou(cc *context, args ...string) (string, error) {
+	_ = args
+	var wg sync.WaitGroup
+	var m sync.Mutex
+	var err error
+	c := dlrange("zhongjilieshou", 1, &wg, func(e error) {
+		m.Lock()
+		err = e
+		m.Unlock()
+	})
+	wg.Wait()
+	if err != nil {
+		return "", err
+	}
+	imgs, err := loadFirstFrames(c, 1)
+	if err != nil {
+		return "", err
+	}
+	name := cc.usrdir + "Zhongjilieshou.png"
+	im, err := img.LoadFirstFrame(cc.headimgsdir[0], 360, 360)
+	if err != nil {
+		return "", err
+	}
+	imgnrgba := imgs[0].InsertBottom(im.Im, 0, 0, 686, 136).Im
+	return "file:///" + name, writer.SavePNG2Path(name, imgnrgba)
+}
+```
 
 ## 第6课-爬虫教学
 
