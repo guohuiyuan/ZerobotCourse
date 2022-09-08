@@ -43,16 +43,16 @@ qq学习群: 861901070
 		- [如何学习第三方库](#如何学习第三方库)
 		- [10进制数转为rbg格式](#10进制数转为rbg格式)
 		- [通过gg库的单元测试, 学习gg库的使用](#通过gg库的单元测试-学习gg库的使用)
-		- [gg示例](#gg示例)
-			- [画一个透明图片](#画一个透明图片)
-			- [画一个白色背景](#画一个白色背景)
-			- [gg加载图片](#gg加载图片)
-			- [gg写字](#gg写字)
-			- [gg画长方形](#gg画长方形)
-			- [image库裁剪](#image库裁剪)
-			- [gg库倒过来](#gg库倒过来)
-			- [gg库矩阵变换](#gg库矩阵变换)
-			- [gg画一个遮罩](#gg画一个遮罩)
+		- [gg库示例](#gg库示例)
+			- [透明图片](#透明图片)
+			- [白色背景](#白色背景)
+			- [加载图片](#加载图片)
+			- [写字](#写字)
+			- [长方形](#长方形)
+			- [裁剪图像](#裁剪图像)
+			- [倒转](#倒转)
+			- [矩阵变换](#矩阵变换)
+			- [图像混合颜色](#图像混合颜色)
 	- [第5课-制作表情包](#第5课-制作表情包)
 		- [步骤](#步骤-1)
 		- [例子-终极猎手](#例子-终极猎手)
@@ -489,7 +489,7 @@ func (dc *Context) SetHexColor(x string) {
 ### 通过gg库的单元测试, 学习gg库的使用
 gg库的单元测试是在[context_test.go](https://github.com/fogleman/gg/blob/master/context_test.go)中的
 
-### gg示例
+### gg库示例
 
 推荐阅读
 
@@ -509,7 +509,7 @@ func ImageToRGBA(src image.Image) *image.RGBA {
 }
 ```
 
-#### 画一个透明图片
+#### 透明图片
 
 ```
 package main
@@ -522,7 +522,7 @@ func main() {
 }
 ```
 
-#### 画一个白色背景
+#### 白色背景
 
 ```
 package main
@@ -542,7 +542,7 @@ func main() {
 
 ```
 
-#### gg加载图片
+#### 加载图片
 
 ```
 package main
@@ -565,7 +565,7 @@ func main() {
 
 ```
 
-#### gg写字
+#### 写字
 
 ```
 package main
@@ -588,7 +588,7 @@ func main() {
 
 ```
 
-#### gg画长方形
+#### 长方形
 
 ```
 package main
@@ -609,7 +609,7 @@ func main() {
 
 ```
 
-#### image库裁剪
+#### 裁剪图像
 
 ```
 package main
@@ -647,7 +647,7 @@ func main() {
 
 ```
 
-#### gg库倒过来
+#### 倒转
 
 ```
 package main
@@ -670,7 +670,7 @@ func main() {
 }
 ```
 
-#### gg库矩阵变换
+#### 矩阵变换
 gg.Scale(0.5,0.5) 意思是让后面的矩阵长宽缩短一半
 
 gg库绕某个点旋转
@@ -704,7 +704,7 @@ func main() {
 
 ```
 
-#### gg画一个遮罩
+#### 图像混合颜色
 
 ```
 待定
@@ -722,13 +722,13 @@ func main() {
 
 - [~~找别人抠好的素材~~](https://github.com/noneplugin/nonebot-plugin-petpet)
 
-- [网站智能抠图](https://www.remove.bg/zh) 
+- [智能抠图](https://www.remove.bg/zh) 
 
 2. 使用图像库进行图形变换
 
 - 主要使用"github.com/FloatTech/zbputils/img"库进行图像变换
   
-(zbp的例子)[https://github.com/FloatTech/ZeroBot-Plugin/blob/master/plugin/gif/png.go]
+[zbp示例](https://github.com/FloatTech/ZeroBot-Plugin/blob/master/plugin/gif/png.go)
 
 ```
 // roll 滚
