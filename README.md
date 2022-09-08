@@ -831,9 +831,11 @@ func zhongjilieshou(cc *context, args ...string) (string, error) {
 [爬虫大佬](https://github.com/xianyucoder)
 
 ### 使用colly爬取新闻
-colly是go语言知名的爬虫框架, 我也是近期学习的, 方便易用, 比较适合爬一些没有加密的网站, 应该也可以爬那种带加密的, 可能可以自定义解密方法, 这个还要研究一下。
+colly是go语言知名的爬虫框架, 我也是近期学习的, 方便易用, 比较适合爬一些没有加密的网站
 
-colly可以通过里面的example学习
+应该也可以爬那种带加密的, 可能可以自定义解密方法, 这个还要研究一下。
+
+colly可以通过colly库里面的example学习
 
 下面是一个爬新闻文章的一个demo
 
