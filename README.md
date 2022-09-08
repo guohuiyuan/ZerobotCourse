@@ -57,6 +57,8 @@ qq学习群: 861901070
 		- [步骤](#步骤-1)
 		- [例子-终极猎手](#例子-终极猎手)
 	- [第6课-爬虫教学](#第6课-爬虫教学)
+		- [示例](#示例-1)
+		- [使用colly爬取新闻](#使用colly爬取新闻)
 	- [第7课-api服务器搭建](#第7课-api服务器搭建)
 
 ## 第0课-golang开发环境搭建
@@ -816,6 +818,24 @@ func zhongjilieshou(cc *context, args ...string) (string, error) {
 ## 第6课-爬虫教学
 
 爬虫教学(http,xpath,goroutine,数据库)
+
+温馨提示, 千万不要直播搞爬虫, 并打开色情网站, 对, 说的就是asmr
+
+### 示例
+[asmr](https://github.com/DiheChen/go-asmr-spider)
+
+[漫画猫](https://github.com/guohuiyuan/maofly-spider)
+
+[爬虫大佬](https://github.com/xianyucoder)
+
+### 使用colly爬取新闻
+colly是go语言知名的爬虫框架, 我也是近期学习的, 方便易用, 比较适合爬一些没有加密的网站, 应该也可以爬那种带加密的, 可能可以自定义解密方法, 这个还要研究一下。
+
+colly可以通过里面的example学习
+
+下面是一个爬新闻文章的一个demo
+
+[第6课](第6课/main.go)
 
 ## 第7课-api服务器搭建
 
