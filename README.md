@@ -60,7 +60,8 @@ qq学习群: 861901070
 		- [例子-终极猎手](#例子-终极猎手)
 	- [第6课-爬虫教学](#第6课-爬虫教学)
 		- [示例](#示例-1)
-		- [使用colly爬取新闻](#使用colly爬取新闻)
+		- [使用colly爬取新闻 (简易)](#使用colly爬取新闻-简易)
+		- [使用colly爬取日语学习资料 (稍难)](#使用colly爬取日语学习资料-稍难)
 	- [第7课-api服务器搭建](#第7课-api服务器搭建)
 
 ## 第0课-golang开发环境搭建
@@ -819,7 +820,9 @@ func zhongjilieshou(cc *context, args ...string) (string, error) {
 
 ## 第6课-爬虫教学
 
-爬虫教学(http,xpath,goroutine,数据库)
+爬虫教学(http,xpath,goquery,goroutine,数据库)
+
+主要使用colly框架来写爬虫, 因为如果是我们自己用http写爬虫, 只适合查找站内某些的信息, 不合适爬全站的信息
 
 温馨提示, 千万不要直播搞爬虫, 并打开色情网站, 对, 说的就是asmr
 
@@ -830,16 +833,23 @@ func zhongjilieshou(cc *context, args ...string) (string, error) {
 
 [爬虫大佬](https://github.com/xianyucoder)
 
-### 使用colly爬取新闻
-colly是go语言知名的爬虫框架, 我也是近期学习的, 方便易用, 比较适合爬一些没有加密的网站
+[Golang goquery selector(选择器) 教程](https://blog.csdn.net/songhao8080/article/details/103669861)
 
-应该也可以爬那种带加密的, 可能可以自定义解密方法, 这个还要研究一下。
+### 使用colly爬取新闻 (简易)
+colly是go语言知名的爬虫框架, 我也是近期学习的, 方便易用, 比较适合爬一些没有加密的网站或者只需要带cookie的网站
+
+也可以爬那种带加密的, 可以自定义加签方法。
 
 colly可以通过colly库里面的example学习
 
 下面是一个爬新闻文章的一个demo
 
 [第6课](第6课/main.go)
+ 
+### 使用colly爬取日语学习资料 (稍难)
+
+[http://jp.tingroom.com/ 的听力资源](https://github.com/guohuiyuan/JpTingroomSpider)
+
 
 ## 第7课-api服务器搭建
 
