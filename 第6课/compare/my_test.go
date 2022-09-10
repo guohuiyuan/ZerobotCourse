@@ -39,18 +39,19 @@ func init() {
 }
 func Re() string {
 	// fmt.Println(re.FindAllStringSubmatch(reStr, -1))
-	return re.FindAllStringSubmatch(reStr, -1)[0][1]
+	return re.FindStringSubmatch(reStr)[1]
 }
 
 func Xpath() string {
-	list, err := htmlquery.QueryAll(doc, "//audio")
-	if err != nil {
-		fmt.Println("err:", err)
-	}
+	// list, err := htmlquery.QueryAll(doc, "//audio")
+	// if err != nil {
+	// 	fmt.Println("err:", err)
+	// }
+	node := htmlquery.FindOne(doc, "//audio")
 	// for _, v := range list {
 	// 	fmt.Printf("%#v\n", v)
 	// }
-	return list[0].Attr[0].Val
+	return node.Attr[0].Val
 }
 
 func Goquery() string {
