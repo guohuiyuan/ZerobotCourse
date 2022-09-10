@@ -838,7 +838,11 @@ func zhongjilieshou(cc *context, args ...string) (string, error) {
 
 ### xpath, goquery和正则性能测试
 
-[对比性能](第6课/compare)
+[性能对比代码](第6课/compare)
+
+![性能对比结果](https://user-images.githubusercontent.com/54976075/189469802-d006be96-fdb0-40cf-88de-e7147f8ee36d.jpg)
+
+事实证明, 算加载的话, 正则确实比xpath和goquery效率高, 但goquery比正则好用, 而且dom可重复利用啊
 
 ```
 cd 第6课/compare && go test -bench . -benchmem
