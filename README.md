@@ -60,6 +60,7 @@ qq学习群: 861901070
 		- [例子-终极猎手](#例子-终极猎手)
 	- [第6课-爬虫教学](#第6课-爬虫教学)
 		- [示例](#示例-1)
+		- [xpath, goquery和正则性能测试](#xpath-goquery和正则性能测试)
 		- [使用colly爬取新闻 (简易)](#使用colly爬取新闻-简易)
 		- [使用colly爬取日语学习资料 (稍难)](#使用colly爬取日语学习资料-稍难)
 	- [第7课-api服务器搭建](#第7课-api服务器搭建)
@@ -835,6 +836,14 @@ func zhongjilieshou(cc *context, args ...string) (string, error) {
 
 [Golang goquery selector(选择器) 教程](https://blog.csdn.net/songhao8080/article/details/103669861)
 
+### xpath, goquery和正则性能测试
+
+[对比性能](第6课/compare)
+
+```
+cd 第6课/compare && go test -bench . -benchmem
+```
+
 ### 使用colly爬取新闻 (简易)
 colly是go语言知名的爬虫框架, 我也是近期学习的, 方便易用, 比较适合爬一些没有加密的网站或者只需要带cookie的网站
 
@@ -844,11 +853,19 @@ colly可以通过colly库里面的example学习
 
 下面是一个爬新闻文章的一个demo
 
-[第6课](第6课/main.go)
+[爬新闻demo](第6课/news)
+
+```
+cd 第6课/news && go run .
+```
  
 ### 使用colly爬取日语学习资料 (稍难)
 
-[http://jp.tingroom.com/ 的听力资源](https://github.com/guohuiyuan/JpTingroomSpider)
+[http://jp.tingroom.com/ 的听力资源](第6课/jpTingroomSpider)
+
+```
+cd 第6课/jpTingroomSpider && go run .
+```
 
 
 ## 第7课-api服务器搭建
