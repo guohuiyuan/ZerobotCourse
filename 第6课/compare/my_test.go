@@ -122,3 +122,25 @@ func BenchmarkGoquery(b *testing.B) {
 		Goquery()
 	}
 }
+
+func BenchmarkXpathWithLoad(b *testing.B) {
+	var err error
+	for n := 0; n < b.N; n++ {
+		doc, err = html.Parse(strings.NewReader(reStr))
+		if err != nil {
+			fmt.Println("err:", err)
+		}
+		Xpath()
+	}
+}
+
+func BenchmarkGoqueryWithLoad(b *testing.B) {
+	var err error
+	for n := 0; n < b.N; n++ {
+		doc2, err = goquery.NewDocumentFromReader(strings.NewReader(reStr))
+		if err != nil {
+			fmt.Println("err:", err)
+		}
+		Goquery()
+	}
+}
