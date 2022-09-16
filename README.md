@@ -1,26 +1,26 @@
 # ZerobotCourse
-zerobot框架教学 
+ZeroBot框架教学 
 
 qq学习群: 861901070
 
 [qq机器人视频教程](https://www.bilibili.com/video/BV1TF411N71C)
 
-## 为什么选择zerobot作为qqbot开发框架
+## 为什么选择ZeroBot作为qqbot开发框架
 1. go语言本身的优势
    
-2. zerobot结构清楚
+2. ZeroBot结构清楚
 
 本课程适用于一些喜欢编程, 想要开发自己的qq机器人, 最好是有一门编程语言基础的人~~计算机大一新生~~
 
 - [ZerobotCourse](#zerobotcourse)
-	- [为什么选择zerobot作为qqbot开发框架](#为什么选择zerobot作为qqbot开发框架)
+	- [为什么选择ZeroBot作为qqbot开发框架](#为什么选择zerobot作为qqbot开发框架)
 	- [第0课-golang开发环境搭建](#第0课-golang开发环境搭建)
 		- [开发环境搭建](#开发环境搭建)
 		- [需要以下工具](#需要以下工具)
 		- [步骤](#步骤)
 		- [参考](#参考)
-	- [第1课-zerobot框架以及示例插件](#第1课-zerobot框架以及示例插件)
-		- [了解zerobot框架](#了解zerobot框架)
+	- [第1课-ZeroBot框架以及示例插件](#第1课-zerobot框架以及示例插件)
+		- [了解ZeroBot框架](#了解zerobot框架)
 		- [helloworld](#helloworld)
 		- [示例代码](#示例代码)
 		- [匹配器](#匹配器)
@@ -62,7 +62,7 @@ qq学习群: 861901070
 		- [例子-终极猎手](#例子-终极猎手)
 	- [第6课-爬虫教学](#第6课-爬虫教学)
 		- [示例](#示例-1)
-		- [xpath, goquery和正则性能测试](#xpath-goquery和正则性能测试)
+		- [xpath, goquery和正则性能测试对比](#xpath-goquery和正则性能测试对比)
 		- [使用colly爬取新闻 (简易)](#使用colly爬取新闻-简易)
 		- [使用colly爬取日语学习资料 (稍难)](#使用colly爬取日语学习资料-稍难)
 	- [第7课-api服务器搭建](#第7课-api服务器搭建)
@@ -85,7 +85,7 @@ qq学习群: 861901070
 - [ ] [go](https://golang.google.cn/dl/go1.18.4.windows-amd64.msi)
 - [ ] [vscode](https://az764295.vo.msecnd.net/stable/b06ae3b2d2dbfe28bca3134cc6be65935cdfea6a/VSCodeSetup-x64-1.69.1.exe)
 
-因为zerobot是go语言写的, 在github上开源的库, 所以上面四个玩意, 怎么样都没法绕开。
+因为ZeroBot是go语言写的, 在github上开源的库, 所以上面四个玩意, 怎么样都没法绕开。
 
 ### 步骤
 
@@ -101,24 +101,24 @@ qq学习群: 861901070
     - git config --global user.name "小锅饭"
     - git config --global user.email "1156544355@qq.com"
 - 安装[go-cqhttp](https://docs.go-cqhttp.org/) (go-cqhttp相当于qq的第三方客户端, 为我们的程序提供qq的接口, 我们调它的接口, 完成发送qq消息, 下载群文件等操作)
-- 下载zerobot框架源码, 并运行 (zerobot框架提供go-cqhttp的接口的封装, 便于开发者编写)
+- 下载ZeroBot框架源码, 并运行 (ZeroBot框架提供go-cqhttp的接口的封装, 便于开发者编写)
 
 ### 参考
-1. [zerobot](https://github.com/wdvxdr1123/ZeroBot)
-2. [zerobot-plugin](https://github.com/FloatTech/ZeroBot-Plugin)
+1. [ZeroBot](https://github.com/wdvxdr1123/ZeroBot)
+2. [ZeroBot-Plugin](https://github.com/FloatTech/ZeroBot-Plugin)
 3. [派蒙Bot](https://github.com/RicheyJang/PaimengBot)
 4. [明日方舟抽卡bot](https://github.com/yuanyan3060/SkadiBot)
-5. [zerobot-plugin江林版](https://github.com/Jiang-Red/ZeroBot-Plugin)
+5. [ZeroBot-Plugin江林版](https://github.com/Jiang-Red/ZeroBot-Plugin)
 
 
-## 第1课-zerobot框架以及示例插件
+## 第1课-ZeroBot框架以及示例插件
 
-本节课主要讲的是zerobot框架和第一个插件的添加
+本节课主要讲的是ZeroBot框架和第一个插件的添加
 
-### 了解zerobot框架
-在我看, zerobot框架和那些web框架挺相似的, 不过zerobot是用的websocket, 是双向的, 而web框架是的使用http, 是单向.
+### 了解ZeroBot框架
+在我看, ZeroBot框架和那些web框架挺相似的, 不过ZeroBot是用的websocket, 是双向的, 而web框架是的使用http, 是单向.
 
-zerobot的消息类型,rule相当于路由, zb的前置和后置处理相当于web中间件, handle都对应的消息的处理, 都定义了context储存上下文的消息
+ZeroBot的消息类型,rule相当于路由, zb的前置和后置处理相当于web中间件, handle都对应的消息的处理, 都定义了context储存上下文的消息
 
 ### helloworld
 输入hello, 机器回复hello world
@@ -341,9 +341,9 @@ chmod 0755 /usr/local/bin/apt-get
 ### sqlite
 zbp使用的数据库是sqlite
 
-SQLite是一个进程内的库，实现了自给自足的、无服务器的、零配置的、事务性的 SQL 数据库引擎。它是一个零配置的数据库，这意味着与其他数据库不一样，您不需要在系统中配置。
+sqlite是一个进程内的库，实现了自给自足的、无服务器的、零配置的、事务性的 SQL 数据库引擎。它是一个零配置的数据库，这意味着与其他数据库不一样，您不需要在系统中配置。
 
-简单就是本地数据库,sqlite让zbp没有对数据库的依赖
+简单就是本地数据库,sqlite让zbp保持数据库的零依赖
 
 ### 数据库框架
 
@@ -729,7 +729,7 @@ func main() {
 
 - [抠图](https://ps.gaoding.com/#/) 
 
-- [~~找别人抠好的素材~~](https://github.com/noneplugin/nonebot-plugin-petpet)
+- [~~借鉴现有素材~~](https://github.com/noneplugin/nonebot-plugin-petpet)
 
 - [智能抠图](https://www.remove.bg/zh) 
 
@@ -824,7 +824,7 @@ func zhongjilieshou(cc *context, args ...string) (string, error) {
 
 ## 第6课-爬虫教学
 
-爬虫教学(http,xpath,goquery,goroutine,数据库)
+爬虫教学(http, xpath, goquery, 正则, goroutine, 数据库)
 
 主要使用colly框架来写爬虫, 因为如果是我们自己用http写爬虫, 只适合查找站内某些的信息, 不合适爬全站的信息
 
@@ -839,7 +839,7 @@ func zhongjilieshou(cc *context, args ...string) (string, error) {
 
 [Golang goquery selector(选择器) 教程](https://blog.csdn.net/songhao8080/article/details/103669861)
 
-### xpath, goquery和正则性能测试
+### xpath, goquery和正则性能测试对比
 
 [性能对比代码](第6课/compare)
 
@@ -884,7 +884,7 @@ api服务器搭建(beego,gin,数据库)
 ### 搁置原因
 这一课涉及的知识面很多
 
-1. 首先是各种web框架, 我打算使用beego, 但现在我对beego还不是很熟练
+1. 首先是各种web框架, 我打算使用beego, 但现在我对beego还不是很了解
    
 2. 让api暴露给互联网使用, 需要一个域名, 服务器, 网络安全知识, 门槛挺高
 
