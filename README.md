@@ -129,6 +129,9 @@ qq学习群: 861901070
 ### linux安装命令
 ```
 # linux ubuntu 
+cp -pv /etc/apt/sources.list /etc/apt/sources.list.bak
+
+sed -i -e 's/security.ubuntu.com/mirrors.aliyun.com/g' -e 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list # 更换镜像源
 
 apt-get -y update
 apt-get install -y wget unzip gzip curl  # 预下载工具
