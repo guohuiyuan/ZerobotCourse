@@ -19,6 +19,7 @@ qq学习群: 861901070
 		- [需要以下工具](#需要以下工具)
 		- [步骤](#步骤)
 		- [参考](#参考)
+	- [番外-linux安装go-cqhttp和zbp](#番外-linux安装go-cqhttp和zbp)
 	- [第1课-ZeroBot框架以及示例插件](#第1课-zerobot框架以及示例插件)
 		- [了解ZeroBot框架](#了解zerobot框架)
 		- [helloworld](#helloworld)
@@ -65,6 +66,7 @@ qq学习群: 861901070
 		- [xpath, goquery和正则性能测试对比](#xpath-goquery和正则性能测试对比)
 		- [使用colly爬取新闻 (简易)](#使用colly爬取新闻-简易)
 		- [使用colly爬取日语学习资料 (稍难)](#使用colly爬取日语学习资料-稍难)
+		- [小埋写的贴吧图片爬虫](#小埋写的贴吧图片爬虫)
 	- [第7课-api服务器搭建](#第7课-api服务器搭建)
 		- [搁置原因](#搁置原因)
 
@@ -109,6 +111,60 @@ qq学习群: 861901070
 3. [派蒙Bot](https://github.com/RicheyJang/PaimengBot)
 4. [明日方舟抽卡bot](https://github.com/yuanyan3060/SkadiBot)
 5. [ZeroBot-Plugin江林版](https://github.com/Jiang-Red/ZeroBot-Plugin)
+
+## 番外-linux安装go-cqhttp和zbp
+[GitHub 文件加速](https://gh.api.99988866.xyz/)
+
+[压缩解压命令](https://blog.csdn.net/m0_37824357/article/details/124674008)
+
+通过文件加速网站, 拿到releases的文件中的下载地址, 然后下载, 解压, 修改权限, 运行
+
+```
+# linux ubuntu 
+
+apt-get -y update
+apt-get install -y wget unzip gzip curl  # 预下载工具
+
+wget https://gh.api.99988866.xyz/https://github.com/Mrs4s/go-cqhttp/releases/download/v1.0.0-rc3/go-cqhttp_linux_amd64.tar.gz # 下载go-cq
+
+# curl 下载也行
+# curl -OL https://gh.api.99988866.xyz/https://github.com/Mrs4s/go-cqhttp/releases/download/v1.0.0-rc3/go-cqhttp_linux_amd64.tar.gz 
+
+
+mkdir go-cqhttp
+
+tar -xzvf go-cqhttp_linux_amd64.tar.gz -C go-cqhttp
+
+chmod +x go-cqhttp # 添加执行权限
+
+cd go-cqhttp
+
+./go-cqhttp
+
+vim config.yml # 修改配置文件
+
+nohup ./go-cqhttp & # 启动挂后台
+
+tail -n 40 info.log # 查看日志
+
+cd .. # 返回上级目录
+
+wget https://gh.api.99988866.xyz/https://github.com/FloatTech/ZeroBot-Plugin/releases/download/v1.5.1-beta4/zbp_linux_amd64.tar.gz # 下载zbp
+
+mkdir zbp
+
+tar -xzvf zbp_linux_amd64.tar.gz -C zbp
+
+cd zbp 
+
+chmod +x zbp # 添加执行权限
+
+./zbp -s config.json # 生成配置文件
+
+vim config.json  #修改配置文件
+
+nohup ./zbp -c config.json & # 带配置文件启动, 启动挂后台
+```
 
 
 ## 第1课-ZeroBot框架以及示例插件
@@ -873,6 +929,13 @@ cd 第6课/news && go run .
 ```
 cd 第6课/jpTingroomSpider && go run .
 ```
+
+### 小埋写的贴吧图片爬虫
+未使用colly框架, 自己起协程
+
+```
+cd 第6课/tieba && go run .
+``
 
 
 ## 第7课-api服务器搭建
