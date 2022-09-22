@@ -20,6 +20,8 @@ qq学习群: 861901070
 		- [步骤](#步骤)
 		- [参考](#参考)
 	- [番外-linux安装go-cqhttp和zbp](#番外-linux安装go-cqhttp和zbp)
+		- [linux一些有用的参考](#linux一些有用的参考)
+		- [linux安装命令](#linux安装命令)
 	- [第1课-ZeroBot框架以及示例插件](#第1课-zerobot框架以及示例插件)
 		- [了解ZeroBot框架](#了解zerobot框架)
 		- [helloworld](#helloworld)
@@ -113,12 +115,18 @@ qq学习群: 861901070
 5. [ZeroBot-Plugin江林版](https://github.com/Jiang-Red/ZeroBot-Plugin)
 
 ## 番外-linux安装go-cqhttp和zbp
+通过文件加速网站, 拿到releases的文件中的下载地址, 然后下载, 解压, 修改权限, 运行
+
+### linux一些有用的参考
+
+[查看linux机器架构](https://www.cnblogs.com/linuxprobe/p/5643668.html)
+
 [GitHub 文件加速](https://gh.api.99988866.xyz/)
 
 [压缩解压命令](https://blog.csdn.net/m0_37824357/article/details/124674008)
 
-通过文件加速网站, 拿到releases的文件中的下载地址, 然后下载, 解压, 修改权限, 运行
 
+### linux安装命令
 ```
 # linux ubuntu 
 
@@ -326,6 +334,12 @@ func main() {
 [ddbot模板使用的api](https://docs.qq.com/doc/DVERZT0FrYVNEb01j)
 
 [图片api整合](./第2课/图片api整合.txt)
+
+练习素材
+
+[有趣的网站](./练习素材/有趣的网站.md)
+
+[B站2查数据获取源码](./练习素材/B站2查数据获取源码.txt)
 
 #### 示例
 
