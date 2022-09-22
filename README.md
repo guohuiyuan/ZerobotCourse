@@ -125,6 +125,7 @@ qq学习群: 861901070
 
 [压缩解压命令](https://blog.csdn.net/m0_37824357/article/details/124674008)
 
+[vim乱码](https://blog.csdn.net/qq_17576885/article/details/121975702)
 
 ### linux安装命令
 ```
@@ -156,7 +157,7 @@ vim config.yml # 修改配置文件
 
 nohup ./go-cqhttp & # 启动挂后台
 
-tail -n 40 info.log # 查看日志
+tail -n 40 nohup.out # 查看日志
 
 cd .. # 返回上级目录
 
@@ -175,6 +176,8 @@ chmod +x zbp # 添加执行权限
 vim config.json  #修改配置文件
 
 nohup ./zbp -c config.json & # 带配置文件启动, 启动挂后台
+
+tail -f nohup.out # 看日志 
 ```
 
 
