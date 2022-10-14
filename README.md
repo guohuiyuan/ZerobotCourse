@@ -97,6 +97,7 @@ qq学习群: 861901070
 - 搭建go语言环境
     - 安装go源代码
     - 配置go的变量GOROOT和GOPATH, 并将%GOROOT%/bin和%GOPATH%/bin 添加到环境变量
+    - go env -w GOPROXY=https://goproxy.cn,direct 修改gomod包镜像
     - 安装vscode
     - 配置vscode的go扩展插件, 参考[go插件配置](第0课/vscodeSettings.md)
 - git配置 (用户名和邮箱使用你自己的)
