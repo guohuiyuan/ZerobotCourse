@@ -956,7 +956,7 @@ cd 第6课/jpTingroomSpider && go run .
 
 ```
 cd 第6课/tieba && go run .
-``
+```
 
 
 ## 第7课-api服务器搭建
