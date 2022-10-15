@@ -977,7 +977,27 @@ cd 第6课/tieba && go run .
 
 ### b站推送
 
+我之前做了两种类型的b站推送, 一种是动态推送, 一种是直播推送. 
+
+动态推送实现是, 每隔10秒拿到每个up主最近一条动态的发布时间并存入内存, 如果这个时间大于之前储存的更新时间, 就把这条动态推送到qq群.
+
+直播推送实现的, 每隔10秒拿到每个直播间的状态, 如果直播的状态有更新, 且直播状态是由闲置到直播中, 就把直播信息发到qq群
+
+[b站推送代码](https://github.com/FloatTech/ZeroBot-Plugin/blob/master/plugin/bilibili/bilibilipush.go)
+
 ### huggingface
+
+huggingface号称ai界的github, 虽然只是demo, 但里面的模型确实好玩.
+
+里面还有api供我们简单体验这些模型的效果, 现在由我教大家如何接入里面的api.
+
+[猫雷vits接入代码](https://github.com/FloatTech/ZeroBot-Plugin-Playground/blob/main/huggingface/vitsnyaru.go)
+
+主要有两个api, 一个push, 一个是status, push就是上传你的文本,图片或者音频等模型的输入, status就是拿到模型的输出.
+
+push只需要请求一次, status需要请求很多次, status是一个异步的请求, 返回里面有一个status字段判断输出是否完成, 很有趣的事, 一旦你拿到了数据, 输出结束, 你再取拿同样的参数请求status, status会报500的错误.
+
+huggingface有些api比较特殊, 不是https请求, 而是wss请求, wss是双向的请求, 所以不需要轮询, 只需要保持连接, 获得输出发送就行, 参考[MagicPrompt-Stable-Diffusion](https://github.com/FloatTech/ZeroBot-Plugin-Playground/blob/main/magicprompt/magicprompt.go)
 
 ## 第8课-api服务器搭建
 
