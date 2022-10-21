@@ -74,6 +74,7 @@ qq学习群: 861901070
 		- [场景](#场景)
 		- [b站推送](#b站推送)
 		- [huggingface](#huggingface)
+		- [核心代码](#核心代码)
 	- [第8课-api服务器搭建](#第8课-api服务器搭建)
 		- [搁置原因](#搁置原因)
 
@@ -998,6 +999,35 @@ huggingface号称ai界的github, 虽然只是demo, 但里面的模型确实好�
 push只需要请求一次, status需要请求很多次, status是一个异步的请求, 返回里面有一个status字段判断输出是否完成, 很有趣的事, 一旦你拿到了数据, 输出结束, 你再取拿同样的参数请求status, status会报500的错误.
 
 huggingface有些api比较特殊, 不是https请求, 而是wss请求, wss是双向的请求, 所以不需要轮询, 只需要保持连接, 获得输出发送就行, 参考[MagicPrompt-Stable-Diffusion](https://github.com/FloatTech/ZeroBot-Plugin-Playground/blob/main/magicprompt/magicprompt.go)
+
+### 核心代码
+
+通过轮询, 拿到status的状态, 如果是已完成, 跳出循环, 出现err或超时, 也跳出循环
+
+```
+go func(c context.Context) {
+		t := time.NewTicker(time.Second * 1)
+		defer t.Stop()
+	LOOP:
+		for {
+			select {
+			case <-t.C:
+				data, err = status(statusURL, statusReq)
+				if err != nil {
+					ch <- data
+					break LOOP
+				}
+				if gjson.ParseBytes(data).Get("status").String() == completeStatus {
+					ch <- data
+					break LOOP
+				}
+			case <-c.Done():
+				ch <- data
+				break LOOP
+			}
+		}
+	}(_ctx)
+```
 
 ## 第8课-api服务器搭建
 
