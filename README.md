@@ -77,6 +77,7 @@ qq学习群: 861901070
 		- [核心代码](#核心代码)
 	- [第8课-api服务器搭建](#第8课-api服务器搭建)
 		- [搁置原因](#搁置原因)
+	- [TodoList](#todolist)
 
 ## 第0课-golang开发环境搭建
 
@@ -1044,6 +1045,13 @@ api服务器搭建(beego,gin,数据库)
 
 3. 暂时不需要搭建api, 因为qq相当于你的前端, 你的后端在本地, 没必要自己搭, 除非机器人框架被毁灭
 
-
+## TodoList
+- [ ] qq自动发说说, 参考[OPQBot](https://github.com/opq-osc/OPQBot)
+- [ ] 每日番剧, 搜索动漫资源
+- [ ] huggingface各种有趣模型接入
+- [ ] 幻影坦克
+- [ ] zbp爬虫优化(使用goquery,colly重构)
+- [ ] 微博推送, a站推送
+- [ ] musescore音乐下载
 
 
