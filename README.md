@@ -386,6 +386,7 @@ func init() {
 		data, err := web.GetData(fmt.Sprintf(tiangouURL, regexMatched[1]))
 		if err != nil {
 			ctx.SendChain(message.Text("Error:", err))
+			return 
 		}
 		ctx.SendChain(message.ImageBytes(data))
 	})
