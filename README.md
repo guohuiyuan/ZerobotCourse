@@ -135,6 +135,8 @@ qq学习群: 861901070
 
 [vim乱码](https://blog.csdn.net/qq_17576885/article/details/121975702)
 
+[ubuntu更换镜像源](https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/)
+
 ### linux安装命令
 ```
 # linux ubuntu 
