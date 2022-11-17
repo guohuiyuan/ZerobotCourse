@@ -76,7 +76,12 @@ qq学习群: 861901070
 		- [huggingface](#huggingface)
 		- [核心代码](#核心代码)
 	- [第8课-api服务器搭建](#第8课-api服务器搭建)
-		- [搁置原因](#搁置原因)
+		- [环境准备](#环境准备)
+			- [protobuf](#protobuf)
+			- [kratos脚手架](#kratos脚手架)
+		- [编写proto, 自动生成代码](#编写proto-自动生成代码)
+		- [安装swagger](#安装swagger)
+		- [音乐下载](#音乐下载)
 	- [TodoList](#todolist)
 
 ## 第0课-golang开发环境搭建
@@ -141,6 +146,8 @@ qq学习群: 861901070
 ```
 # linux ubuntu 
 cp -pv /etc/apt/sources.list /etc/apt/sources.list.bak
+
+# 可以搜索清华镜像源, 根据不同版本的ubuntu更换镜像
 
 sed -i -e 's/security.ubuntu.com/mirrors.aliyun.com/g' -e 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list # 更换镜像源
 
@@ -516,6 +523,7 @@ func main() {
 一般我们学习go第三方库, 最快的方法就是看第三方库的作者写的example, 那可能有人要问了为啥不去看别人写的技术博客?
 有两个原因, 第一, 找技术博客比较麻烦, 第二, 有些库冷到根本没有技术文档, 需要我们多多阅读源码
 
+补充一句, 看源码的方式学习, 不适合初学者, 因为比较难看懂, 没错我说的就是rust, 所以最好是看视频, 还有文档。
 
 ### 10进制数转为rbg格式
 
@@ -996,62 +1004,243 @@ huggingface号称ai界的github, 虽然只是demo, 但里面的模型确实好�
 
 里面还有api供我们简单体验这些模型的效果, 现在由我教大家如何接入里面的api.
 
-[猫雷vits接入代码](https://github.com/FloatTech/ZeroBot-Plugin-Playground/blob/main/huggingface/vitsnyaru.go)
+[猫雷vits接入代码](https://github.com/FloatTech/ZeroBot-Plugin/blob/master/plugin/vitsnyaru/vitsnyaru.go)
 
 主要有两个api, 一个push, 一个是status, push就是上传你的文本,图片或者音频等模型的输入, status就是拿到模型的输出.
 
 push只需要请求一次, status需要请求很多次, status是一个异步的请求, 返回里面有一个status字段判断输出是否完成, 很有趣的事, 一旦你拿到了数据, 输出结束, 你再取拿同样的参数请求status, status会报500的错误.
 
-huggingface有些api比较特殊, 不是https请求, 而是wss请求, wss是双向的请求, 所以不需要轮询, 只需要保持连接, 获得输出发送就行, 参考[MagicPrompt-Stable-Diffusion](https://github.com/FloatTech/ZeroBot-Plugin-Playground/blob/main/magicprompt/magicprompt.go)
+huggingface有些api比较特殊, 不是https请求, 而是wss请求, wss是双向的请求, 所以不需要轮询, 只需要保持连接, 获得输出发送就行, 参考[MagicPrompt-Stable-Diffusion](https://github.com/FloatTech/ZeroBot-Plugin/blob/master/plugin/magicprompt/magicprompt.go)
 
 ### 核心代码
 
 通过轮询, 拿到status的状态, 如果是已完成, 跳出循环, 出现err或超时, 也跳出循环
 
 ```
-go func(c context.Context) {
-		t := time.NewTicker(time.Second * 1)
-		defer t.Stop()
-	LOOP:
-		for {
-			select {
-			case <-t.C:
-				data, err = status(statusURL, statusReq)
-				if err != nil {
-					ch <- data
-					break LOOP
-				}
-				if gjson.ParseBytes(data).Get("status").String() == completeStatus {
-					ch <- data
-					break LOOP
-				}
-			case <-c.Done():
-				ch <- data
-				break LOOP
+			statusReq = hf.StatusRequest{
+				Hash: pushRes.Hash,
 			}
-		}
-	}(_ctx)
+
+			t := time.NewTicker(time.Second * 1)
+			defer t.Stop()
+		LOOP:
+			for {
+				select {
+				case <-t.C:
+					data, err = hf.Status(statusURL, statusReq)
+					if err != nil {
+						ch <- data
+						break LOOP
+					}
+					if gjson.ParseBytes(data).Get("status").String() == hf.CompleteStatus {
+						ch <- data
+						break LOOP
+					}
+				case <-_ctx.Done():
+					ch <- data
+					break LOOP
+				}
+			}
 ```
 
 ## 第8课-api服务器搭建
 
-api服务器搭建(beego,gin,数据库)
+api服务器搭建(kratos,数据库)
 
-先搁置, 等什么时候go-cqhttp被毁灭了再写, 到时候大家就只能玩api了
+~~先搁置, 等什么时候go-cqhttp被毁灭了再写, 到时候大家就只能玩api了~~
 
-### 搁置原因
-这一课涉及的知识面很多
+最近想写个音乐下载后端, 所以开始写了, 重新学习一下kratos的写法 
 
-1. 首先是各种web框架, 我打算使用beego, 但现在我对beego还不是很了解
-   
-2. 让api暴露给互联网使用, 需要一个域名, 服务器, 网络安全知识, 门槛挺高
+[kratos使用](https://www.cnblogs.com/jiujuan/p/16331967.html)
 
-3. 暂时不需要搭建api, 因为qq相当于你的前端, 你的后端在本地, 没必要自己搭, 除非机器人框架被毁灭
+### 环境准备
+
+#### protobuf
+首先了解一下什么是protobuf
+
+Google Protocol Buffer( 简称 Protobuf) 是 Google 公司内部的混合语言数据标准。他们用于 RPC 系统和持续数据存储系统。提供一个具有高效的协议数据交换格式工具库(类似Json)。
+但相比于Json，Protobuf有更高的转化效率，时间效率和空间效率都是JSON的3-5倍。
+可用于通讯协议、数据存储等领域的语言无关、平台无关、可扩展的序列化结构数据格式。目前提供了 C++、Java、Python 、OC、Swift等语言的 API。总只一句话就是很好，支持多平台且与语言无关。
+
+我们想编写protobuf, 通过protobuf-gen-go生成go代码, 编写函数名的烦恼, 我们只要编写函数的实现就行了
+
+下载protobuf-gen-go
+```
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+```
+
+#### kratos脚手架
+下载kratos
+
+```
+go install github.com/go-kratos/kratos/cmd/kratos/v2@latest
+```
+
+kratos新建项目
+
+```
+kratos new music-downloader
+```
+
+kratos运行
+
+```
+kratos run
+curl http://localhost:8000/helloworld/kratos
+```
+
+### 编写proto, 自动生成代码
+添加proto
+
+```
+kratos proto add api/helloworld/v1/music.proto
+```
+
+```
+syntax = "proto3";
+
+package api.helloworld.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "music-downloader/api/helloworld/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.helloworld.v1";
+
+service Music {
+	rpc SearchMusic (SearchMusicRequest) returns (SearchMusicReply){
+		option (google.api.http) = {
+			get: "/music/search"
+		};
+	};
+}
+
+message SearchMusicRequest {
+	string name = 1;
+}
+
+message SearchMusicReply {
+	repeated SearchMusicReplyItem musicList = 1;			
+}
+
+message SearchMusicReplyItem {
+	string url = 1;
+	string audio = 2;
+	string title = 3;
+	string content = 4;
+	string image = 5;
+}
+```
+
+生成基础参数
+
+```
+kratos proto client api/helloworld/v1/music.proto
+```
+
+添加service层
+
+```
+kratos proto server api/helloworld/v1/music.proto -t internal/service
+```
+
+修改 internal\server 代码
+
+**internal\server\grpc.go**
+
+```
+package server
+
+import (
+	v1 "music-downloader/api/helloworld/v1"
+	"music-downloader/internal/conf"
+	"music-downloader/internal/service"
+
+	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/transport/grpc"
+)
+
+// NewGRPCServer new a gRPC server.
+func NewGRPCServer(c *conf.Server, music *service.MusicService, logger log.Logger) *grpc.Server {
+	var opts = []grpc.ServerOption{
+		grpc.Middleware(
+			recovery.Recovery(),
+		),
+	}
+	if c.Grpc.Network != "" {
+		opts = append(opts, grpc.Network(c.Grpc.Network))
+	}
+	if c.Grpc.Addr != "" {
+		opts = append(opts, grpc.Address(c.Grpc.Addr))
+	}
+	if c.Grpc.Timeout != nil {
+		opts = append(opts, grpc.Timeout(c.Grpc.Timeout.AsDuration()))
+	}
+	srv := grpc.NewServer(opts...)
+	v1.RegisterMusicServer(srv, music)
+	return srv
+}
+
+```
+
+**internal\server\http.go**
+
+```
+package server
+
+import (
+	v1 "music-downloader/api/helloworld/v1"
+	"music-downloader/internal/conf"
+	"music-downloader/internal/service"
+
+	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/transport/http"
+)
+
+// NewHTTPServer new a HTTP server.
+func NewHTTPServer(c *conf.Server, music *service.MusicService, logger log.Logger) *http.Server {
+	var opts = []http.ServerOption{
+		http.Middleware(
+			recovery.Recovery(),
+		),
+	}
+	if c.Http.Network != "" {
+		opts = append(opts, http.Network(c.Http.Network))
+	}
+	if c.Http.Addr != "" {
+		opts = append(opts, http.Address(c.Http.Addr))
+	}
+	if c.Http.Timeout != nil {
+		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
+	}
+	srv := http.NewServer(opts...)
+	v1.RegisterMusicHTTPServer(srv, music)
+	return srv
+}
+
+```
+
+### 安装swagger
+生成swagger文档
+
+proto导入太痛苦, 最后我还是把文件复制到third_party里去了
+
+```
+git clone git@github.com:grpc-ecosystem/grpc-gateway.git
+git clone git@github.com:gogo/protobuf.git
+```
+
+突然发现, go应该不适合写swagger, swagger是写在proto里的, 这太麻烦了
+
+### 音乐下载
+
 
 ## TodoList
-- [ ] qq自动发说说, 参考[OPQBot](https://github.com/opq-osc/OPQBot)
+- [x] qq自动发说说, 参考[OPQBot](https://github.com/opq-osc/OPQBot)
 - [ ] 每日番剧, 搜索动漫资源
-- [ ] huggingface各种有趣模型接入
+- [x] huggingface各种有趣模型接入
 - [ ] 幻影坦克
 - [ ] zbp爬虫优化(使用goquery,colly重构)
 - [ ] 微博推送, a站推送
