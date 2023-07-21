@@ -28,6 +28,7 @@ qq学习群: 861901070
 - [可以搜索清华镜像源, 根据不同版本的ubuntu更换镜像](#可以搜索清华镜像源-根据不同版本的ubuntu更换镜像)
 - [curl 下载也行](#curl-下载也行)
 - [curl -OL https://gh.api.99988866.xyz/https://github.com/Mrs4s/go-cqhttp/releases/download/v1.0.0-rc3/go-cqhttp\_linux\_amd64.tar.gz](#curl--ol-httpsghapi99988866xyzhttpsgithubcommrs4sgo-cqhttpreleasesdownloadv100-rc3go-cqhttp_linux_amd64targz)
+		- [linux配置](#linux配置)
 	- [第1课-ZeroBot框架以及示例插件](#第1课-zerobot框架以及示例插件)
 		- [了解ZeroBot框架](#了解zerobot框架)
 		- [helloworld](#helloworld)
@@ -207,6 +208,8 @@ tail -f nohup.out # 看日志
 <code><pre>
 </details>
 
+### linux配置
+[linux配置](/code/start/Linux.md`)
 
 ## 第1课-ZeroBot框架以及示例插件
 
