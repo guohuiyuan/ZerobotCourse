@@ -3,6 +3,8 @@ ZeroBot框架教学
 
 qq学习群: 861901070
 
+重新整理了一次代码, 仓库所有代码在code目录下
+
 [qq机器人视频教程](https://www.bilibili.com/video/BV1TF411N71C)
 
 ## 为什么选择ZeroBot作为qqbot开发框架
@@ -22,6 +24,10 @@ qq学习群: 861901070
 	- [番外-linux安装go-cqhttp和zbp](#番外-linux安装go-cqhttp和zbp)
 		- [linux一些有用的参考](#linux一些有用的参考)
 		- [linux安装命令](#linux安装命令)
+- [linux ubuntu](#linux-ubuntu)
+- [可以搜索清华镜像源, 根据不同版本的ubuntu更换镜像](#可以搜索清华镜像源-根据不同版本的ubuntu更换镜像)
+- [curl 下载也行](#curl-下载也行)
+- [curl -OL https://gh.api.99988866.xyz/https://github.com/Mrs4s/go-cqhttp/releases/download/v1.0.0-rc3/go-cqhttp\_linux\_amd64.tar.gz](#curl--ol-httpsghapi99988866xyzhttpsgithubcommrs4sgo-cqhttpreleasesdownloadv100-rc3go-cqhttp_linux_amd64targz)
 	- [第1课-ZeroBot框架以及示例插件](#第1课-zerobot框架以及示例插件)
 		- [了解ZeroBot框架](#了解zerobot框架)
 		- [helloworld](#helloworld)
@@ -143,7 +149,10 @@ qq学习群: 861901070
 [ubuntu更换镜像源](https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/)
 
 ### linux安装命令
-```
+
+<details>
+<summary>展开查看</summary>
+<pre><code>
 # linux ubuntu 
 cp -pv /etc/apt/sources.list /etc/apt/sources.list.bak
 
@@ -195,17 +204,18 @@ vim config.json  #修改配置文件
 nohup ./zbp -c config.json & # 带配置文件启动, 启动挂后台
 
 tail -f nohup.out # 看日志 
-```
+<code><pre>
+</details>
 
 
 ## 第1课-ZeroBot框架以及示例插件
 
-本节课主要讲的是ZeroBot框架和第一个插件的添加
+本节课主要讲的是ZeroBot框架的调用和插件的添加
 
 ### 了解ZeroBot框架
 在我看, ZeroBot框架和那些web框架挺相似的, 不过ZeroBot是用的websocket, 是双向的, 而web框架是的使用http, 是单向.
 
-ZeroBot的消息类型,rule相当于路由, zb的前置和后置处理相当于web中间件, handle都对应的消息的处理, 都定义了context储存上下文的消息
+ZeroBot的消息类型, rule相当于路由, zb的前置和后置处理相当于web中间件, handle都对应的消息的处理, 都定义了context储存上下文的消息
 
 ### helloworld
 输入hello, 机器回复hello world
@@ -226,8 +236,8 @@ func init() {
 	})
 }
 
-func main(){
-	zero.RunAndBlock(zero.Config{
+func main() {
+	zero.RunAndBlock(&zero.Config{
 		NickName:      []string{"bot"},
 		CommandPrefix: "/",
 		SuperUsers:    []int64{123456},
@@ -237,15 +247,16 @@ func main(){
 	}, nil)
 }
 
+
 ```
 
 注意: 所有engine都是在init的过程中注册的
 
 ### 示例代码
-进入[第一课](./第1课/main.go)目录,然后go run main.go
+进入[第一课](./code/first/main.go)目录, 然后go run main.go
 
 ```
-cd 第1课
+cd code/first
 go run main.go
 ```
 
@@ -278,6 +289,7 @@ go run main.go
 本节课主要讲的是api的使用
 
 ### http + gjson解析
+[gjson](code/second/gjson/main.go)
 
 ```
 package main
@@ -285,7 +297,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/FloatTech/zbputils/web"
+	"github.com/FloatTech/floatbox/web"
 	"github.com/tidwall/gjson"
 )
 
@@ -294,7 +306,7 @@ var (
 )
 
 func main() {
-	data, err := web.RequestDataWith(web.NewDefaultClient(), requestURL, "GET", "", web.RandUA())
+	data, err := web.RequestDataWith(web.NewDefaultClient(), requestURL, "GET", "", web.RandUA(), nil)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -306,6 +318,7 @@ func main() {
 ```
 
 ### http + json.Unmarshal 解析
+[json](code/second/json/main.go)
 
 ```
 package main
@@ -314,7 +327,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/FloatTech/zbputils/web"
+	"github.com/FloatTech/floatbox/web"
 )
 
 var (
@@ -329,7 +342,7 @@ type shadiao struct {
 }
 
 func main() {
-	data, err := web.RequestDataWith(web.NewDefaultClient(), requestURL, "GET", "", web.RandUA())
+	data, err := web.RequestDataWith(web.NewDefaultClient(), requestURL, "GET", "", web.RandUA(), nil)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -365,18 +378,18 @@ func main() {
 [B站2查数据获取源码](./练习素材/B站2查数据获取源码.txt)
 
 #### 示例
+[tiangou](code/second/tiangou/main.go)
 
 ```
-// Package tiangou2 舔狗日记
-package tiangou2
+// Package main 舔狗日记
+package main
 
 import (
 	"fmt"
 
-	ctrl "github.com/FloatTech/zbpctrl"
-	"github.com/FloatTech/zbputils/control"
-	"github.com/FloatTech/zbputils/web"
+	"github.com/FloatTech/floatbox/web"
 	zero "github.com/wdvxdr1123/ZeroBot"
+	"github.com/wdvxdr1123/ZeroBot/driver"
 	"github.com/wdvxdr1123/ZeroBot/message"
 )
 
@@ -385,21 +398,30 @@ const (
 )
 
 func init() {
-	engine := control.Register("tiangou2", &ctrl.Options[*zero.Ctx]{
-		DisableOnDefault: false,
-		Help:             "舔狗日记\n- 舔狗123456",
-	})
+	engine := zero.New()
 	engine.OnRegex(`^舔狗\s?(\d+)$`).SetBlock(true).Handle(func(ctx *zero.Ctx) {
 		regexMatched := ctx.State["regex_matched"].([]string)
 		ctx.SendChain(message.Text(regexMatched[1]))
 		data, err := web.GetData(fmt.Sprintf(tiangouURL, regexMatched[1]))
 		if err != nil {
-			ctx.SendChain(message.Text("Error:", err))
-			return 
+			ctx.SendChain(message.Text("ERROR:", err))
+			return
 		}
 		ctx.SendChain(message.ImageBytes(data))
 	})
 }
+
+func main() {
+	zero.RunAndBlock(&zero.Config{
+		NickName:      []string{"bot"},
+		CommandPrefix: "/",
+		SuperUsers:    []int64{123456},
+		Driver: []zero.Driver{
+			driver.NewWebSocketClient("ws://127.0.0.1:6700/", ""),
+		},
+	}, nil)
+}
+
 
 ```
 
@@ -458,6 +480,7 @@ gorm需要自己封装一个类型
 [学习教程](https://www.topgoer.com/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C/gorm/gorm%E7%94%A8%E6%B3%95%E4%BB%8B%E7%BB%8D.html)
 
 ### 小作文示例代码
+[article](code/third/main.go)
 
 ```
 package main
@@ -528,6 +551,7 @@ func main() {
 ### 10进制数转为rbg格式
 
 做bilibili查成分的时候碰到了一个问题就是把10进制数转为rbg格式
+[color](code/fourth/color/main.go)
 
 ```
 package main
@@ -614,6 +638,7 @@ func ImageToRGBA(src image.Image) *image.RGBA {
 ```
 
 #### 透明图片
+[blank](code/fourth/blank/main.go)
 
 ```
 package main
@@ -627,6 +652,7 @@ func main() {
 ```
 
 #### 白色背景
+[white](code/fourth/white/main.go)
 
 ```
 package main
@@ -647,6 +673,7 @@ func main() {
 ```
 
 #### 加载图片
+[load](code/fourth/load/main.go)
 
 ```
 package main
@@ -670,6 +697,7 @@ func main() {
 ```
 
 #### 写字
+[drawstring](code/fourth/drawstring/main.go)
 
 ```
 package main
@@ -693,6 +721,7 @@ func main() {
 ```
 
 #### 长方形
+[rectangle](code/fourth/rectangle/main.go)
 
 ```
 package main
@@ -714,6 +743,7 @@ func main() {
 ```
 
 #### 裁剪图像
+[cut](code/fourth/cut/main.go)
 
 ```
 package main
@@ -723,13 +753,13 @@ import (
 	"image"
 	"os"
 
-	"github.com/FloatTech/floatbox/img/writer"
+	"github.com/FloatTech/imgfactory"
 	"github.com/fogleman/gg"
 )
 
 func main() {
 	dc := gg.NewContext(4000, 2000)
-	back, err := gg.LoadImage("原神.jpg")
+	back, err := gg.LoadImage("fourth/原神.jpg")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -741,7 +771,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	_, err = writer.WriteTo(nim, f)
+	_, err = imgfactory.WriteTo(nim, f)
 	_ = f.Close()
 	if err != nil {
 		fmt.Println(err)
@@ -749,9 +779,11 @@ func main() {
 	}
 }
 
+
 ```
 
 #### 倒转
+[invert](code/fourth/invert/main.go)
 
 ```
 package main
@@ -764,7 +796,7 @@ import (
 
 func main() {
 	dc := gg.NewContext(4000, 2000)
-	back, err := gg.LoadImage("原神.jpg")
+	back, err := gg.LoadImage("fourth/原神.jpg")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -775,6 +807,8 @@ func main() {
 ```
 
 #### 矩阵变换
+[transform](code/fourth/transform/main.go)
+
 gg.Scale(0.5,0.5) 意思是让后面的矩阵长宽缩短一半
 
 gg库绕某个点旋转
@@ -792,7 +826,7 @@ import (
 
 func main() {
 	dc := gg.NewContext(4000, 2000)
-	back, err := gg.LoadImage("原神.jpg")
+	back, err := gg.LoadImage("fourth/原神.jpg")
 	if err != nil {
 		fmt.Println(err)
 	}
